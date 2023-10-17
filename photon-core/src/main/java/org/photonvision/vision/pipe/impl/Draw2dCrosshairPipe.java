@@ -17,8 +17,6 @@
 
 package org.photonvision.vision.pipe.impl;
 
-import java.awt.*;
-import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -32,6 +30,9 @@ import org.photonvision.vision.pipe.MutatingPipe;
 import org.photonvision.vision.target.RobotOffsetPointMode;
 import org.photonvision.vision.target.TargetCalculations;
 import org.photonvision.vision.target.TrackedTarget;
+
+import java.awt.*;
+import java.util.List;
 
 public class Draw2dCrosshairPipe
         extends MutatingPipe<

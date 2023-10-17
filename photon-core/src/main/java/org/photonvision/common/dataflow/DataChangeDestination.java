@@ -22,9 +22,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum DataChangeDestination {
-    DCD_ACTIVEMODULE,
-    DCD_ACTIVEPIPELINESETTINGS,
-    DCD_GENSETTINGS,
+    DCD_ACTIVE_MODULE,
+    DCD_ACTIVE_PIPELINE_SETTINGS,
+    DCD_GEN_SETTINGS,
     DCD_UI,
     DCD_OTHER;
 

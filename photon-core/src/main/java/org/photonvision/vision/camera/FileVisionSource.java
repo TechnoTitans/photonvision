@@ -19,8 +19,6 @@ package org.photonvision.vision.camera;
 
 import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.cscore.VideoMode.PixelFormat;
-import java.nio.file.Path;
-import java.util.HashMap;
 import org.photonvision.common.configuration.CameraConfiguration;
 import org.photonvision.vision.frame.FrameProvider;
 import org.photonvision.vision.frame.FrameStaticProperties;
@@ -28,11 +26,14 @@ import org.photonvision.vision.frame.provider.FileFrameProvider;
 import org.photonvision.vision.processes.VisionSource;
 import org.photonvision.vision.processes.VisionSourceSettables;
 
+import java.nio.file.Path;
+import java.util.HashMap;
+
 public class FileVisionSource extends VisionSource {
     private final FileFrameProvider frameProvider;
     private final FileSourceSettables settables;
 
-    public FileVisionSource(CameraConfiguration cameraConfiguration) {
+    public FileVisionSource(final CameraConfiguration cameraConfiguration) {
         super(cameraConfiguration);
         var calibration =
                 !cameraConfiguration.calibrations.isEmpty()
@@ -48,7 +49,8 @@ public class FileVisionSource extends VisionSource {
                 new FileSourceSettables(cameraConfiguration, frameProvider.get().frameStaticProperties);
     }
 
-    public FileVisionSource(String name, String imagePath, double fov) {
+    @SuppressWarnings("unused")
+    public FileVisionSource(final String name, final String imagePath, final double fov) {
         super(new CameraConfiguration(name, imagePath));
         frameProvider = new FileFrameProvider(imagePath, fov);
         settables =

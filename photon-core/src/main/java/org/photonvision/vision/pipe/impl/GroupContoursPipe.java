@@ -17,14 +17,15 @@
 
 package org.photonvision.vision.pipe.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import org.photonvision.vision.opencv.Contour;
 import org.photonvision.vision.opencv.ContourGroupingMode;
 import org.photonvision.vision.opencv.ContourIntersectionDirection;
 import org.photonvision.vision.pipe.CVPipe;
 import org.photonvision.vision.target.PotentialTarget;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class GroupContoursPipe
         extends CVPipe<List<Contour>, List<PotentialTarget>, GroupContoursPipe.GroupContoursParams> {

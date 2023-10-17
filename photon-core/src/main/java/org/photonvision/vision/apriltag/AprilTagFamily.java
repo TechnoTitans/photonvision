@@ -18,17 +18,17 @@
 package org.photonvision.vision.apriltag;
 
 public enum AprilTagFamily {
-    kTag36h11,
-    kTag25h9,
-    kTag16h5,
-    kTagCircle21h7,
-    kTagCircle49h12,
-    kTagStandard41h12,
-    kTagStandard52h13,
-    kTagCustom48h11;
+    Tag36h11,
+    Tag25h9,
+    Tag16h5,
+    TagCircle21h7,
+    TagCircle49h12,
+    TagStandard41h12,
+    TagStandard52h13,
+    TagCustom48h11;
 
     public String getNativeName() {
         // We want to strip the leading kT and replace with "t"
-        return this.name().replaceFirst("kT", "t");
+        return this.name().replaceFirst("T", "t");
     }
 }

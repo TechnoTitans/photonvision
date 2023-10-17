@@ -17,11 +17,12 @@
 
 package org.photonvision.vision;
 
-import java.util.HashMap;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.photonvision.vision.camera.CameraQuirk;
 import org.photonvision.vision.camera.QuirkyCamera;
+
+import java.util.HashMap;
 
 public class QuirkyCameraTest {
     @Test

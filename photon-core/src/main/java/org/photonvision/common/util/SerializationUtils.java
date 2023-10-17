@@ -17,9 +17,10 @@
 
 package org.photonvision.common.util;
 
-import java.util.HashMap;
 import org.photonvision.common.logging.LogGroup;
 import org.photonvision.common.logging.Logger;
+
+import java.util.HashMap;
 
 public final class SerializationUtils {
     private static final Logger logger = new Logger(SerializationUtils.class, LogGroup.General);

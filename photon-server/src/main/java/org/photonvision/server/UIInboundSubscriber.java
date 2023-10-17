@@ -33,7 +33,7 @@ public class UIInboundSubscriber extends DataChangeSubscriber {
     public UIInboundSubscriber() {
         super(
                 Collections.singletonList(DataChangeSource.DCS_WEBSOCKET),
-                Collections.singletonList(DataChangeDestination.DCD_GENSETTINGS));
+                Collections.singletonList(DataChangeDestination.DCD_GEN_SETTINGS));
     }
 
     @Override

@@ -18,11 +18,8 @@
 package org.photonvision.vision.aruco;
 
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import java.util.ArrayList;
 import org.opencv.aruco.Aruco;
 import org.opencv.core.Mat;
 import org.opencv.objdetect.ArucoDetector;
@@ -30,38 +27,27 @@ import org.photonvision.common.logging.LogGroup;
 import org.photonvision.common.logging.Logger;
 import org.photonvision.vision.calibration.CameraCalibrationCoefficients;
 
+import java.util.ArrayList;
+
 public class PhotonArucoDetector {
     private static final Logger logger = new Logger(PhotonArucoDetector.class, LogGroup.VisionModule);
 
     private static final Rotation3d ARUCO_BASE_ROTATION =
             new Rotation3d(VecBuilder.fill(0, 0, 1), Units.degreesToRadians(180));
 
-    Mat ids;
+    private final Mat ids;
 
-    Mat tvecs;
-    Mat rvecs;
-    ArrayList<Mat> corners;
-
-    Mat cornerMat;
-    Translation3d translation;
-    Rotation3d rotation;
-    double timeStartDetect;
-    double timeEndDetect;
-    Pose3d tagPose;
-    double timeStartProcess;
-    double timeEndProcess;
-    double[] xCorners = new double[4];
-    double[] yCorners = new double[4];
+    private final Mat tvecs;
+    private final Mat rvecs;
+    private final ArrayList<Mat> corners;
 
     public PhotonArucoDetector() {
         logger.debug("New Aruco Detector");
-        ids = new Mat();
-        tvecs = new Mat();
-        rvecs = new Mat();
-        corners = new ArrayList<>();
-        tagPose = new Pose3d();
-        translation = new Translation3d();
-        rotation = new Rotation3d();
+
+        this.ids = new Mat();
+        this.tvecs = new Mat();
+        this.rvecs = new Mat();
+        this.corners = new ArrayList<>();
     }
 
     public ArucoDetectionResult[] detect(
@@ -71,6 +57,7 @@ public class PhotonArucoDetector {
             ArucoDetector detector) {
         detector.detectMarkers(grayscaleImg, corners, ids);
         if (coeffs != null) {
+            //noinspection deprecation
             Aruco.estimatePoseSingleMarkers(
                     corners,
                     tagSize,
@@ -81,24 +68,21 @@ public class PhotonArucoDetector {
         }
 
         ArucoDetectionResult[] toReturn = new ArucoDetectionResult[corners.size()];
-        timeStartProcess = System.currentTimeMillis();
         for (int i = 0; i < corners.size(); i++) {
-            cornerMat = corners.get(i);
+            Mat cornerMat = corners.get(i);
             // logger.debug(cornerMat.dump());
-            xCorners =
-                    new double[] {
-                        cornerMat.get(0, 0)[0],
-                        cornerMat.get(0, 1)[0],
-                        cornerMat.get(0, 2)[0],
-                        cornerMat.get(0, 3)[0]
-                    };
-            yCorners =
-                    new double[] {
-                        cornerMat.get(0, 0)[1],
-                        cornerMat.get(0, 1)[1],
-                        cornerMat.get(0, 2)[1],
-                        cornerMat.get(0, 3)[1]
-                    };
+            double[] xCorners = new double[]{
+                    cornerMat.get(0, 0)[0],
+                    cornerMat.get(0, 1)[0],
+                    cornerMat.get(0, 2)[0],
+                    cornerMat.get(0, 3)[0]
+            };
+            double[] yCorners = new double[]{
+                    cornerMat.get(0, 0)[1],
+                    cornerMat.get(0, 1)[1],
+                    cornerMat.get(0, 2)[1],
+                    cornerMat.get(0, 3)[1]
+            };
             cornerMat.release();
 
             double[] tvec;

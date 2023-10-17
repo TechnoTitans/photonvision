@@ -17,13 +17,14 @@
 
 package org.photonvision.common.dataflow;
 
+import org.photonvision.common.dataflow.events.DataChangeEvent;
+import org.photonvision.common.logging.LogGroup;
+import org.photonvision.common.logging.Logger;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
-import org.photonvision.common.dataflow.events.DataChangeEvent;
-import org.photonvision.common.logging.LogGroup;
-import org.photonvision.common.logging.Logger;
 
 @SuppressWarnings("rawtypes")
 public class DataChangeService {

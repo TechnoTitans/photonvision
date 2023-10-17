@@ -16,12 +16,13 @@
  */
 package org.photonvision.vision.target;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.opencv.core.RotatedRect;
 import org.photonvision.vision.opencv.CVShape;
 import org.photonvision.vision.opencv.Contour;
 import org.photonvision.vision.opencv.Releasable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PotentialTarget implements Releasable {
 

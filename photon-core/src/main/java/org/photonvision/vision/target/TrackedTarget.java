@@ -22,8 +22,6 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import java.util.HashMap;
-import java.util.List;
 import org.opencv.core.*;
 import org.photonvision.common.util.math.MathUtils;
 import org.photonvision.vision.aruco.ArucoDetectionResult;
@@ -32,6 +30,9 @@ import org.photonvision.vision.opencv.CVShape;
 import org.photonvision.vision.opencv.Contour;
 import org.photonvision.vision.opencv.DualOffsetValues;
 import org.photonvision.vision.opencv.Releasable;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class TrackedTarget implements Releasable {
     public final Contour m_mainContour;

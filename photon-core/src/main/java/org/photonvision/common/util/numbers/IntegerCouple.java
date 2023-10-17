@@ -22,7 +22,7 @@ public class IntegerCouple extends NumberCouple<Integer> {
         super(0, 0);
     }
 
-    public IntegerCouple(Integer first, Integer second) {
+    public IntegerCouple(final Integer first, final Integer second) {
         super(first, second);
     }
 }

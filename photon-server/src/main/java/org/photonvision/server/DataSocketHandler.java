@@ -78,7 +78,7 @@ public class DataSocketHandler {
         users.add(context);
         dcService.publishEvent(
                 new IncomingWebSocketEvent<>(
-                        DataChangeDestination.DCD_GENSETTINGS, "userConnected", context));
+                        DataChangeDestination.DCD_GEN_SETTINGS, "userConnected", context));
     }
 
     protected void onClose(WsCloseContext context) {
@@ -131,13 +131,13 @@ public class DataSocketHandler {
                                 var data = (HashMap<String, Object>) entryValue;
                                 var dmExpEvent =
                                         new IncomingWebSocketEvent<Integer>(
-                                                DataChangeDestination.DCD_ACTIVEMODULE, "driverExposure", data);
+                                                DataChangeDestination.DCD_ACTIVE_MODULE, "driverExposure", data);
                                 var dmBrightEvent =
                                         new IncomingWebSocketEvent<Integer>(
-                                                DataChangeDestination.DCD_ACTIVEMODULE, "driverBrightness", data);
+                                                DataChangeDestination.DCD_ACTIVE_MODULE, "driverBrightness", data);
                                 var dmIsDriverEvent =
                                         new IncomingWebSocketEvent<Boolean>(
-                                                DataChangeDestination.DCD_ACTIVEMODULE, "isDriver", data);
+                                                DataChangeDestination.DCD_ACTIVE_MODULE, "isDriver", data);
 
                                 dcService.publishEvents(dmExpEvent, dmBrightEvent, dmIsDriverEvent);
                                 break;
@@ -146,7 +146,7 @@ public class DataSocketHandler {
                             {
                                 var ccnEvent =
                                         new IncomingWebSocketEvent<>(
-                                                DataChangeDestination.DCD_ACTIVEMODULE,
+                                                DataChangeDestination.DCD_ACTIVE_MODULE,
                                                 "cameraNickname",
                                                 (String) entryValue,
                                                 cameraIndex,
@@ -158,7 +158,7 @@ public class DataSocketHandler {
                             {
                                 var cpnEvent =
                                         new IncomingWebSocketEvent<>(
-                                                DataChangeDestination.DCD_ACTIVEMODULE,
+                                                DataChangeDestination.DCD_ACTIVE_MODULE,
                                                 "pipelineName",
                                                 (String) entryValue,
                                                 cameraIndex,
@@ -179,7 +179,7 @@ public class DataSocketHandler {
 
                                 var newPipelineEvent =
                                         new IncomingWebSocketEvent<>(
-                                                DataChangeDestination.DCD_ACTIVEMODULE,
+                                                DataChangeDestination.DCD_ACTIVE_MODULE,
                                                 "newPipelineInfo",
                                                 Pair.of(name, type),
                                                 cameraIndex,
@@ -201,7 +201,7 @@ public class DataSocketHandler {
 
                                 var newPipelineEvent =
                                         new IncomingWebSocketEvent<>(
-                                                DataChangeDestination.DCD_ACTIVEMODULE,
+                                                DataChangeDestination.DCD_ACTIVE_MODULE,
                                                 "duplicatePipeline",
                                                 pipeIndex,
                                                 cameraIndex,
@@ -213,7 +213,7 @@ public class DataSocketHandler {
                             {
                                 var deleteCurrentPipelineEvent =
                                         new IncomingWebSocketEvent<>(
-                                                DataChangeDestination.DCD_ACTIVEMODULE,
+                                                DataChangeDestination.DCD_ACTIVE_MODULE,
                                                 "deleteCurrPipeline",
                                                 0,
                                                 cameraIndex,
@@ -225,7 +225,7 @@ public class DataSocketHandler {
                             {
                                 var robotOffsetPointEvent =
                                         new IncomingWebSocketEvent<>(
-                                                DataChangeDestination.DCD_ACTIVEMODULE,
+                                                DataChangeDestination.DCD_ACTIVE_MODULE,
                                                 "robotOffsetPoint",
                                                 (Integer) entryValue,
                                                 cameraIndex,
@@ -245,7 +245,7 @@ public class DataSocketHandler {
                             {
                                 var changePipelineEvent =
                                         new IncomingWebSocketEvent<>(
-                                                DataChangeDestination.DCD_ACTIVEMODULE,
+                                                DataChangeDestination.DCD_ACTIVE_MODULE,
                                                 "changePipeline",
                                                 (Integer) entryValue,
                                                 cameraIndex,
@@ -257,7 +257,7 @@ public class DataSocketHandler {
                             {
                                 var changePipelineEvent =
                                         new IncomingWebSocketEvent<>(
-                                                DataChangeDestination.DCD_ACTIVEMODULE,
+                                                DataChangeDestination.DCD_ACTIVE_MODULE,
                                                 "startCalibration",
                                                 (Map) entryValue,
                                                 cameraIndex,
@@ -269,7 +269,7 @@ public class DataSocketHandler {
                             {
                                 var takeCalSnapshotEvent =
                                         new IncomingWebSocketEvent<>(
-                                                DataChangeDestination.DCD_ACTIVEMODULE,
+                                                DataChangeDestination.DCD_ACTIVE_MODULE,
                                                 "takeCalSnapshot",
                                                 0,
                                                 cameraIndex,
@@ -289,7 +289,7 @@ public class DataSocketHandler {
                                         }
                                         var pipelineSettingChangeEvent =
                                                 new IncomingWebSocketEvent(
-                                                        DataChangeDestination.DCD_ACTIVEPIPELINESETTINGS,
+                                                        DataChangeDestination.DCD_ACTIVE_PIPELINE_SETTINGS,
                                                         dataEntry.getKey(),
                                                         dataEntry.getValue(),
                                                         cameraIndex2,
@@ -305,7 +305,7 @@ public class DataSocketHandler {
                             {
                                 var changePipelineEvent =
                                         new IncomingWebSocketEvent<>(
-                                                DataChangeDestination.DCD_ACTIVEMODULE,
+                                                DataChangeDestination.DCD_ACTIVE_MODULE,
                                                 "changePipelineType",
                                                 (Integer) entryValue,
                                                 cameraIndex,

@@ -18,9 +18,10 @@
 package org.photonvision.common.dataflow.events;
 
 import io.javalin.websocket.WsContext;
-import java.util.HashMap;
 import org.photonvision.common.dataflow.DataChangeDestination;
 import org.photonvision.common.dataflow.DataChangeSource;
+
+import java.util.HashMap;
 
 public class IncomingWebSocketEvent<T> extends DataChangeEvent<T> {
     public final Integer cameraIndex;

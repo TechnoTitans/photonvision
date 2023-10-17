@@ -17,11 +17,9 @@
 
 package org.photonvision.vision.pipe.impl;
 
-import java.awt.*;
-import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
-import org.opencv.core.*;
 import org.opencv.core.Point;
+import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import org.photonvision.common.logging.LogGroup;
 import org.photonvision.common.logging.Logger;
@@ -31,6 +29,9 @@ import org.photonvision.vision.opencv.CVShape;
 import org.photonvision.vision.opencv.ContourShape;
 import org.photonvision.vision.pipe.MutatingPipe;
 import org.photonvision.vision.target.TrackedTarget;
+
+import java.awt.*;
+import java.util.List;
 
 public class Draw2dTargetsPipe
         extends MutatingPipe<Pair<Mat, List<TrackedTarget>>, Draw2dTargetsPipe.Draw2dTargetsParams> {

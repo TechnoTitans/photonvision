@@ -17,12 +17,13 @@
 
 package org.photonvision.vision.pipe.impl;
 
-import java.util.*;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 import org.photonvision.vision.pipe.CVPipe;
 import org.photonvision.vision.target.TrackedTarget;
+
+import java.util.*;
 
 /**
  * Determines the target corners of the {@link TrackedTarget}. The {@link

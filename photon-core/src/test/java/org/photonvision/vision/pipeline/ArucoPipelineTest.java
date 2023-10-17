@@ -17,8 +17,6 @@
 
 package org.photonvision.vision.pipeline;
 
-import java.io.IOException;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.photonvision.common.util.TestUtils;
@@ -27,6 +25,9 @@ import org.photonvision.vision.frame.provider.FileFrameProvider;
 import org.photonvision.vision.pipeline.result.CVPipelineResult;
 import org.photonvision.vision.target.TargetModel;
 import org.photonvision.vision.target.TrackedTarget;
+
+import java.io.IOException;
+import java.util.stream.Collectors;
 
 public class ArucoPipelineTest {
     @BeforeEach
@@ -45,7 +46,7 @@ public class ArucoPipelineTest {
         pipeline.getSettings().cornerDetectionUseConvexHulls = true;
         pipeline.getSettings().targetModel = TargetModel.k200mmAprilTag;
 
-        // pipeline.getSettings().tagFamily = AprilTagFamily.kTag36h11;
+        // pipeline.getSettings().tagFamily = AprilTagFamily.Tag36h11;
 
         var frameProvider =
                 new FileFrameProvider(

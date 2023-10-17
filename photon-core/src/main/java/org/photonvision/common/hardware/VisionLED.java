@@ -18,10 +18,6 @@
 package org.photonvision.common.hardware;
 
 import edu.wpi.first.networktables.NetworkTableEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
 import org.photonvision.common.hardware.GPIO.CustomGPIO;
 import org.photonvision.common.hardware.GPIO.GPIOBase;
 import org.photonvision.common.hardware.GPIO.pi.PigpioException;
@@ -31,6 +27,11 @@ import org.photonvision.common.logging.LogGroup;
 import org.photonvision.common.logging.Logger;
 import org.photonvision.common.util.TimedTaskManager;
 import org.photonvision.common.util.math.MathUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 
 public class VisionLED {
     private static final Logger logger = new Logger(VisionLED.class, LogGroup.VisionModule);

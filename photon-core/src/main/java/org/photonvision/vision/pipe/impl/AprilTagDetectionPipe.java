@@ -19,9 +19,10 @@ package org.photonvision.vision.pipe.impl;
 
 import edu.wpi.first.apriltag.AprilTagDetection;
 import edu.wpi.first.apriltag.AprilTagDetector;
-import java.util.List;
 import org.photonvision.vision.opencv.CVMat;
 import org.photonvision.vision.pipe.CVPipe;
+
+import java.util.List;
 
 public class AprilTagDetectionPipe
         extends CVPipe<CVMat, List<AprilTagDetection>, AprilTagDetectionPipeParams> {

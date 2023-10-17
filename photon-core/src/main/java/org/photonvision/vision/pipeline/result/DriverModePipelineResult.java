@@ -17,8 +17,9 @@
 
 package org.photonvision.vision.pipeline.result;
 
-import java.util.List;
 import org.photonvision.vision.frame.Frame;
+
+import java.util.List;
 
 public class DriverModePipelineResult extends CVPipelineResult {
     public DriverModePipelineResult(double latencyNanos, double fps, Frame outputFrame) {

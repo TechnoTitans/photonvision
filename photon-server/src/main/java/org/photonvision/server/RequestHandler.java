@@ -18,14 +18,12 @@
 package org.photonvision.server;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.UploadedFile;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -46,16 +44,60 @@ import org.photonvision.common.util.ShellExec;
 import org.photonvision.common.util.TimedTaskManager;
 import org.photonvision.common.util.file.ProgramDirectoryUtilities;
 import org.photonvision.vision.calibration.CameraCalibrationCoefficients;
+import org.photonvision.vision.processes.VisionModule;
 import org.photonvision.vision.processes.VisionModuleManager;
 
 public class RequestHandler {
     // Treat all 2XX calls as "INFO"
     // Treat all 4XX calls as "ERROR"
     // Treat all 5XX calls as "ERROR"
-
     private static final Logger logger = new Logger(RequestHandler.class, LogGroup.WebServer);
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    private static final ObjectMapper kObjectMapper = new ObjectMapper();
+    private static Optional<UploadedFile> verifyUploadedFile(
+            final UploadedFile file,
+            final Context ctx,
+            final String expectedType
+    ) {
+        if (file == null) {
+            ctx.status(400);
+            ctx.result(
+                    "No File was sent with the request. Make sure that the hardware config json is sent at the key 'data'");
+            logger.error(
+                    "No File was sent with the request. Make sure that the hardware config json is sent at the key 'data'");
+            return Optional.empty();
+        } else if (!file.extension().contains(expectedType)) {
+            ctx.status(400);
+            ctx.result(
+                    "The uploaded file was not of type 'json'. The uploaded file should be a .json file.");
+            logger.error(
+                    "The uploaded file was not of type 'json'. The uploaded file should be a .json file.");
+            return Optional.empty();
+        }
+
+        return Optional.of(file);
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private static Optional<File> getUploadedFileAsFile(
+            final UploadedFile file,
+            final Context ctx,
+            final String expectedType
+    ) {
+        final Optional<UploadedFile> uploadedFile = verifyUploadedFile(file, ctx, expectedType);
+        if (uploadedFile.isEmpty()) {
+            return Optional.empty();
+        }
+
+        final Optional<File> tempFilePath = handleTempFileCreation(uploadedFile.get());
+        if (tempFilePath.isEmpty()) {
+            ctx.status(500);
+            ctx.result("There was an error while creating a temporary copy of the file");
+            logger.error("There was an error while creating a temporary copy of the file");
+        }
+
+        return tempFilePath;
+    }
 
     public static void onSettingsImportRequest(Context ctx) {
         var file = ctx.uploadedFile("data");
@@ -121,33 +163,9 @@ public class RequestHandler {
     }
 
     public static void onHardwareConfigRequest(Context ctx) {
-        var file = ctx.uploadedFile("data");
-
-        if (file == null) {
-            ctx.status(400);
-            ctx.result(
-                    "No File was sent with the request. Make sure that the hardware config json is sent at the key 'data'");
-            logger.error(
-                    "No File was sent with the request. Make sure that the hardware config json is sent at the key 'data'");
-            return;
-        }
-
-        if (!file.extension().contains("json")) {
-            ctx.status(400);
-            ctx.result(
-                    "The uploaded file was not of type 'json'. The uploaded file should be a .json file.");
-            logger.error(
-                    "The uploaded file was not of type 'json'. The uploaded file should be a .json file.");
-            return;
-        }
-
-        // Create a temp file
-        var tempFilePath = handleTempFileCreation(file);
-
+        final Optional<File> tempFilePath =
+                getUploadedFileAsFile(ctx.uploadedFile("data"), ctx, "json");
         if (tempFilePath.isEmpty()) {
-            ctx.status(500);
-            ctx.result("There was an error while creating a temporary copy of the file");
-            logger.error("There was an error while creating a temporary copy of the file");
             return;
         }
 
@@ -163,33 +181,9 @@ public class RequestHandler {
     }
 
     public static void onHardwareSettingsRequest(Context ctx) {
-        var file = ctx.uploadedFile("data");
-
-        if (file == null) {
-            ctx.status(400);
-            ctx.result(
-                    "No File was sent with the request. Make sure that the hardware settings json is sent at the key 'data'");
-            logger.error(
-                    "No File was sent with the request. Make sure that the hardware settings json is sent at the key 'data'");
-            return;
-        }
-
-        if (!file.extension().contains("json")) {
-            ctx.status(400);
-            ctx.result(
-                    "The uploaded file was not of type 'json'. The uploaded file should be a .json file.");
-            logger.error(
-                    "The uploaded file was not of type 'json'. The uploaded file should be a .json file.");
-            return;
-        }
-
-        // Create a temp file
-        var tempFilePath = handleTempFileCreation(file);
-
+        final Optional<File> tempFilePath =
+                getUploadedFileAsFile(ctx.uploadedFile("data"), ctx, "json");
         if (tempFilePath.isEmpty()) {
-            ctx.status(500);
-            ctx.result("There was an error while creating a temporary copy of the file");
-            logger.error("There was an error while creating a temporary copy of the file");
             return;
         }
 
@@ -205,33 +199,9 @@ public class RequestHandler {
     }
 
     public static void onNetworkConfigRequest(Context ctx) {
-        var file = ctx.uploadedFile("data");
-
-        if (file == null) {
-            ctx.status(400);
-            ctx.result(
-                    "No File was sent with the request. Make sure that the network config json is sent at the key 'data'");
-            logger.error(
-                    "No File was sent with the request. Make sure that the network config json is sent at the key 'data'");
-            return;
-        }
-
-        if (!file.extension().contains("json")) {
-            ctx.status(400);
-            ctx.result(
-                    "The uploaded file was not of type 'json'. The uploaded file should be a .json file.");
-            logger.error(
-                    "The uploaded file was not of type 'json'. The uploaded file should be a .json file.");
-            return;
-        }
-
-        // Create a temp file
-        var tempFilePath = handleTempFileCreation(file);
-
+        final Optional<File> tempFilePath =
+                getUploadedFileAsFile(ctx.uploadedFile("data"), ctx, "json");
         if (tempFilePath.isEmpty()) {
-            ctx.status(500);
-            ctx.result("There was an error while creating a temporary copy of the file");
-            logger.error("There was an error while creating a temporary copy of the file");
             return;
         }
 
@@ -247,46 +217,41 @@ public class RequestHandler {
     }
 
     public static void onOfflineUpdateRequest(Context ctx) {
-        var file = ctx.uploadedFile("jarData");
-
-        if (file == null) {
-            ctx.status(400);
-            ctx.result(
-                    "No File was sent with the request. Make sure that the new jar is sent at the key 'jarData'");
-            logger.error(
-                    "No File was sent with the request. Make sure that the new jar is sent at the key 'jarData'");
-            return;
-        }
-
-        if (!file.extension().contains("jar")) {
-            ctx.status(400);
-            ctx.result(
-                    "The uploaded file was not of type 'jar'. The uploaded file should be a .jar file.");
-            logger.error(
-                    "The uploaded file was not of type 'jar'. The uploaded file should be a .jar file.");
+        final Optional<UploadedFile> file =
+                verifyUploadedFile(ctx.uploadedFile("jarData"), ctx, "jar");
+        if (file.isEmpty()) {
             return;
         }
 
         try {
-            Path filePath =
-                    Paths.get(ProgramDirectoryUtilities.getProgramDirectory(), "photonvision.jar");
-            File targetFile = new File(filePath.toString());
-            var stream = new FileOutputStream(targetFile);
+            final Optional<String> programDirectory = ProgramDirectoryUtilities.getProgramDirectory();
+            final Path filePath = Paths.get(
+                    programDirectory.orElseThrow(
+                            () -> new FileNotFoundException("getProgramDirectory() returned empty program directory!")
+                    ),
+                    "photonvision.jar"
+            );
 
-            file.content().transferTo(stream);
-            stream.close();
 
-            ctx.status(200);
-            ctx.result(
-                    "Offline update successfully complete. PhotonVision will restart in the background.");
-            logger.info(
-                    "Offline update successfully complete. PhotonVision will restart in the background.");
-            restartProgram();
-        } catch (FileNotFoundException e) {
+            final File targetFile = new File(filePath.toString());
+            try (
+                    final InputStream fileContent = file.get().content();
+                    final FileOutputStream stream = new FileOutputStream(targetFile)
+            ) {
+                fileContent.transferTo(stream);
+            } finally {
+                ctx.status(200);
+                ctx.result(
+                        "Offline update successfully complete. PhotonVision will restart in the background.");
+                logger.info(
+                        "Offline update successfully complete. PhotonVision will restart in the background.");
+                restartProgram();
+            }
+        } catch (final FileNotFoundException e) {
             ctx.result("The current program jar file couldn't be found.");
             ctx.status(500);
             logger.error("The current program jar file couldn't be found.", e);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             ctx.result("Unable to overwrite the existing program with the new program.");
             ctx.status(500);
             logger.error("Unable to overwrite the existing program with the new program.", e);
@@ -296,7 +261,7 @@ public class RequestHandler {
     public static void onGeneralSettingsRequest(Context ctx) {
         NetworkConfig config;
         try {
-            config = kObjectMapper.readValue(ctx.body(), NetworkConfig.class);
+            config = OBJECT_MAPPER.readValue(ctx.body(), NetworkConfig.class);
 
             ctx.status(200);
             ctx.result("Successfully saved general settings");
@@ -320,14 +285,14 @@ public class RequestHandler {
 
     public static void onCameraSettingsRequest(Context ctx) {
         try {
-            var data = kObjectMapper.readTree(ctx.body());
+            final JsonNode data = OBJECT_MAPPER.readTree(ctx.body());
 
-            int index = data.get("index").asInt();
-            double fov = data.get("settings").get("fov").asDouble();
+            final int index = data.get("index").asInt();
+            final double fov = data.get("settings").get("fov").asDouble();
 
-            var module = VisionModuleManager.getInstance().getModule(index);
+            final VisionModule module = VisionModuleManager.getInstance().getModule(index);
+
             module.setFov(fov);
-
             module.saveModule();
 
             ctx.status(200);
@@ -354,6 +319,8 @@ public class RequestHandler {
             var tempPath = Files.createTempFile("photonvision-journalctl", ".txt");
             shell.executeBashCommand("journalctl -u photonvision.service > " + tempPath.toAbsolutePath());
 
+            // what the hell is going on here
+            //noinspection StatementWithEmptyBody
             while (!shell.isOutputCompleted()) {
                 // TODO: add timeout
             }
@@ -371,22 +338,21 @@ public class RequestHandler {
                 ctx.result("The journalctl service was unable to export logs");
                 logger.error("The journalctl service was unable to export logs");
             }
-        } catch (IOException e) {
+        } catch (final IOException ioException) {
             ctx.status(500);
             ctx.result("There was an error while exporting journactl logs");
-            logger.error("There was an error while exporting journactl logs", e);
+            logger.error("There was an error while exporting journactl logs", ioException);
         }
     }
 
     public static void onCalibrationEndRequest(Context ctx) {
         logger.info("Calibrating camera! This will take a long time...");
 
-        int index;
-
         try {
-            index = kObjectMapper.readTree(ctx.body()).get("index").asInt();
+            final int index = OBJECT_MAPPER.readTree(ctx.body()).get("index").asInt();
+            final CameraCalibrationCoefficients calData =
+                    VisionModuleManager.getInstance().getModule(index).endCalibration();
 
-            var calData = VisionModuleManager.getInstance().getModule(index).endCalibration();
             if (calData == null) {
                 ctx.result("The calibration process failed");
                 ctx.status(500);
@@ -400,49 +366,52 @@ public class RequestHandler {
             ctx.result("Camera calibration successfully completed!");
             ctx.status(200);
             logger.info("Camera calibration successfully completed!");
-        } catch (JsonProcessingException e) {
+        } catch (final JsonProcessingException jsonProcessingException) {
             ctx.status(400);
             ctx.result(
                     "The 'index' field was not found in the request. Please make sure the index of the vision module is specified with the 'index' key.");
             logger.error(
                     "The 'index' field was not found in the request. Please make sure the index of the vision module is specified with the 'index' key.",
-                    e);
-        } catch (Exception e) {
+                    jsonProcessingException);
+        } catch (final Exception exception) {
             ctx.status(500);
             ctx.result("There was an error while ending calibration");
-            logger.error("There was an error while ending calibration", e);
+            logger.error("There was an error while ending calibration", exception);
         }
     }
 
-    public static void onCalibrationImportRequest(Context ctx) {
-        var data = ctx.body();
+    public static void onCalibrationImportRequest(final Context ctx) {
+        final String data = ctx.body();
 
         try {
-            var actualObj = kObjectMapper.readTree(data);
+            final JsonNode actualObj = OBJECT_MAPPER.readTree(data);
 
-            int cameraIndex = actualObj.get("cameraIndex").asInt();
-            var payload = kObjectMapper.readTree(actualObj.get("payload").asText());
-            var coeffs = CameraCalibrationCoefficients.parseFromCalibdbJson(payload);
+            final int cameraIndex = actualObj.get("cameraIndex").asInt();
+            final JsonNode payload = OBJECT_MAPPER.readTree(actualObj.get("payload").asText());
+            final CameraCalibrationCoefficients coefficients =
+                    CameraCalibrationCoefficients.parseFromCalibdbJson(payload);
 
-            var uploadCalibrationEvent =
+            final IncomingWebSocketEvent<CameraCalibrationCoefficients> uploadCalibrationEvent =
                     new IncomingWebSocketEvent<>(
-                            DataChangeDestination.DCD_ACTIVEMODULE,
+                            DataChangeDestination.DCD_ACTIVE_MODULE,
                             "calibrationUploaded",
-                            coeffs,
+                            coefficients,
                             cameraIndex,
-                            null);
+                            null
+                    );
             DataChangeService.getInstance().publishEvent(uploadCalibrationEvent);
 
             ctx.status(200);
             ctx.result("Calibration imported successfully from CalibDB data!");
             logger.info("Calibration imported successfully from CalibDB data!");
-        } catch (JsonProcessingException e) {
+        } catch (final JsonProcessingException jsonProcessingException) {
             ctx.status(400);
             ctx.result(
                     "The Provided CalibDB data is malformed and cannot be parsed for the required fields.");
             logger.error(
                     "The Provided CalibDB data is malformed and cannot be parsed for the required fields.",
-                    e);
+                    jsonProcessingException
+            );
         }
     }
 
@@ -456,30 +425,30 @@ public class RequestHandler {
         ctx.status(HardwareManager.getInstance().restartDevice() ? 204 : 500);
     }
 
-    public static void onCameraNicknameChangeRequest(Context ctx) {
+    public static void onCameraNicknameChangeRequest(final Context ctx) {
         try {
-            var data = kObjectMapper.readTree(ctx.body());
+            final JsonNode data = OBJECT_MAPPER.readTree(ctx.body());
 
-            String name = data.get("name").asText();
-            int idx = data.get("cameraIndex").asInt();
+            final String name = data.get("name").asText();
+            final int idx = data.get("cameraIndex").asInt();
 
             VisionModuleManager.getInstance().getModule(idx).setCameraNickname(name);
+
             ctx.status(200);
             ctx.result("Successfully changed the camera name to: " + name);
             logger.info("Successfully changed the camera name to: " + name);
-        } catch (JsonProcessingException e) {
+        } catch (final JsonProcessingException jsonProcessingException) {
             ctx.status(400);
             ctx.result("The provided nickname data was malformed");
-            logger.error("The provided nickname data was malformed", e);
-
-        } catch (Exception e) {
+            logger.error("The provided nickname data was malformed", jsonProcessingException);
+        } catch (final Exception exception) {
             ctx.status(500);
             ctx.result("An error occurred while changing the camera's nickname");
-            logger.error("An error occurred while changing the camera's nickname", e);
+            logger.error("An error occurred while changing the camera's nickname", exception);
         }
     }
 
-    public static void onMetricsPublishRequest(Context ctx) {
+    public static void onMetricsPublishRequest(final Context ctx) {
         HardwareManager.getInstance().publishMetrics();
         ctx.status(204);
     }
@@ -490,10 +459,10 @@ public class RequestHandler {
      * @param file the uploaded file.
      * @return Temporary file. Empty if the temporary file was unable to be created.
      */
-    private static Optional<File> handleTempFileCreation(UploadedFile file) {
-        var tempFilePath =
+    private static Optional<File> handleTempFileCreation(final UploadedFile file) {
+        final File tempFilePath =
                 new File(Path.of(System.getProperty("java.io.tmpdir"), file.filename()).toString());
-        boolean makeDirsRes = tempFilePath.getParentFile().mkdirs();
+        final boolean makeDirsRes = tempFilePath.getParentFile().mkdirs();
 
         if (!makeDirsRes) {
             logger.error(
@@ -523,14 +492,15 @@ public class RequestHandler {
                             if (Platform.isLinux()) {
                                 try {
                                     new ShellExec().executeBashCommand("systemctl restart photonvision.service");
-                                } catch (IOException e) {
-                                    logger.error("Could not restart device!", e);
+                                } catch (final IOException ioException) {
+                                    logger.error("Could not restart device!", ioException);
                                     System.exit(0);
                                 }
                             } else {
                                 System.exit(0);
                             }
                         },
-                        0);
+                        0
+                );
     }
 }

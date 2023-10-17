@@ -20,8 +20,6 @@ package org.photonvision.vision.frame.consumer;
 import edu.wpi.first.cscore.*;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import java.awt.*;
-import java.util.ArrayList;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -29,6 +27,9 @@ import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
 import org.photonvision.common.util.ColorHelper;
 import org.photonvision.vision.opencv.CVMat;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 public class MJPGFrameConsumer {
     public static final Mat EMPTY_MAT = new Mat(60, 15 * 7, CvType.CV_8UC3);

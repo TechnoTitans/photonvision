@@ -17,14 +17,15 @@
 
 package org.photonvision.vision.pipe.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.opencv.core.RotatedRect;
 import org.photonvision.common.util.numbers.DoubleCouple;
 import org.photonvision.vision.frame.FrameStaticProperties;
 import org.photonvision.vision.opencv.Contour;
 import org.photonvision.vision.pipe.CVPipe;
 import org.photonvision.vision.target.TargetCalculations;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FilterContoursPipe
         extends CVPipe<List<Contour>, List<Contour>, FilterContoursPipe.FilterContoursParams> {

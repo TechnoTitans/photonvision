@@ -17,16 +17,17 @@
 
 package org.photonvision.common.networking;
 
+import org.photonvision.common.hardware.Platform;
+import org.photonvision.common.logging.LogGroup;
+import org.photonvision.common.logging.Logger;
+import org.photonvision.common.util.ShellExec;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import org.photonvision.common.hardware.Platform;
-import org.photonvision.common.logging.LogGroup;
-import org.photonvision.common.logging.Logger;
-import org.photonvision.common.util.ShellExec;
 
 public class NetworkUtils {
     private static final Logger logger = new Logger(NetworkUtils.class, LogGroup.General);

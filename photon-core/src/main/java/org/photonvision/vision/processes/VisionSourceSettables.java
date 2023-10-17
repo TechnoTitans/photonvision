@@ -18,12 +18,13 @@
 package org.photonvision.vision.processes;
 
 import edu.wpi.first.cscore.VideoMode;
-import java.util.HashMap;
 import org.photonvision.common.configuration.CameraConfiguration;
 import org.photonvision.common.logging.LogGroup;
 import org.photonvision.common.logging.Logger;
 import org.photonvision.vision.calibration.CameraCalibrationCoefficients;
 import org.photonvision.vision.frame.FrameStaticProperties;
+
+import java.util.HashMap;
 
 public abstract class VisionSourceSettables {
     protected static final Logger logger =

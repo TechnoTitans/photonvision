@@ -18,6 +18,15 @@
 package org.photonvision.common.configuration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.photonvision.common.logging.LogGroup;
+import org.photonvision.common.logging.Logger;
+import org.photonvision.common.util.file.FileUtils;
+import org.photonvision.common.util.file.JacksonUtils;
+import org.photonvision.vision.pipeline.CVPipelineSettings;
+import org.photonvision.vision.pipeline.DriverModePipelineSettings;
+import org.photonvision.vision.processes.VisionSource;
+import org.zeroturnaround.zip.ZipUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,14 +39,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.stream.Collectors;
-import org.photonvision.common.logging.LogGroup;
-import org.photonvision.common.logging.Logger;
-import org.photonvision.common.util.file.FileUtils;
-import org.photonvision.common.util.file.JacksonUtils;
-import org.photonvision.vision.pipeline.CVPipelineSettings;
-import org.photonvision.vision.pipeline.DriverModePipelineSettings;
-import org.photonvision.vision.processes.VisionSource;
-import org.zeroturnaround.zip.ZipUtil;
 
 class LegacyConfigProvider extends ConfigProvider {
     private static final Logger logger = new Logger(LegacyConfigProvider.class, LogGroup.General);

@@ -17,10 +17,11 @@
 
 package org.photonvision.vision.opencv;
 
-import java.util.HashMap;
 import org.opencv.core.Mat;
 import org.photonvision.common.logging.LogGroup;
 import org.photonvision.common.logging.Logger;
+
+import java.util.HashMap;
 
 public class CVMat implements Releasable {
     private static final Logger logger = new Logger(CVMat.class, LogGroup.General);

@@ -19,13 +19,14 @@ package org.photonvision.vision.camera;
 
 import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.math.Pair;
-import java.util.HashMap;
 import org.photonvision.common.configuration.CameraConfiguration;
 import org.photonvision.common.util.math.MathUtils;
 import org.photonvision.raspi.LibCameraJNI;
 import org.photonvision.vision.camera.LibcameraGpuSource.FPSRatedVideoMode;
 import org.photonvision.vision.opencv.ImageRotationMode;
 import org.photonvision.vision.processes.VisionSourceSettables;
+
+import java.util.HashMap;
 
 public class LibcameraGpuSettables extends VisionSourceSettables {
     private FPSRatedVideoMode currentVideoMode;
@@ -34,15 +35,15 @@ public class LibcameraGpuSettables extends VisionSourceSettables {
     private boolean lastAutoExposureActive;
     private int lastGain = 50;
     private Pair<Integer, Integer> lastAwbGains = new Pair<>(18, 18);
-    private boolean m_initialized = false;
+    private boolean initialized = false;
 
     private final LibCameraJNI.SensorModel sensorModel;
 
-    private ImageRotationMode m_rotationMode;
+    private ImageRotationMode rotationMode;
 
     public void setRotation(ImageRotationMode rotationMode) {
-        if (rotationMode != m_rotationMode) {
-            m_rotationMode = rotationMode;
+        if (rotationMode != this.rotationMode) {
+            this.rotationMode = rotationMode;
 
             setVideoModeInternal(getCurrentVideoMode());
         }
@@ -199,7 +200,7 @@ public class LibcameraGpuSettables extends VisionSourceSettables {
         // We need to make sure that other threads don't try to do anything funny while we're recreating
         // the camera
         synchronized (LibCameraJNI.CAMERA_LOCK) {
-            if (m_initialized) {
+            if (initialized) {
                 logger.debug("Stopping libcamera");
                 if (!LibCameraJNI.stopCamera()) {
                     logger.error("Couldn't stop a zero copy Pi Camera while switching video modes");
@@ -212,7 +213,7 @@ public class LibcameraGpuSettables extends VisionSourceSettables {
 
             logger.debug("Creating libcamera");
             if (!LibCameraJNI.createCamera(
-                    mode.width, mode.height, (m_rotationMode == ImageRotationMode.DEG_180 ? 180 : 0))) {
+                    mode.width, mode.height, (rotationMode == ImageRotationMode.DEG_180 ? 180 : 0))) {
                 logger.error("Couldn't create a zero copy Pi Camera while switching video modes");
             }
             logger.debug("Starting libcamera");
@@ -220,7 +221,7 @@ public class LibcameraGpuSettables extends VisionSourceSettables {
                 logger.error("Couldn't start a zero copy Pi Camera while switching video modes");
             }
 
-            m_initialized = true;
+            initialized = true;
         }
 
         // We don't store last settings on the native side, and when you change video mode these get

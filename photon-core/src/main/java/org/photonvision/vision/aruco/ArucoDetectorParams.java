@@ -26,9 +26,9 @@ import org.photonvision.common.logging.Logger;
 public class ArucoDetectorParams {
     private static final Logger logger = new Logger(PhotonArucoDetector.class, LogGroup.VisionModule);
 
-    private float m_decimate = -1;
-    private int m_iterations = -1;
-    private double m_accuracy = -1;
+    private float decimate = -1;
+    private int iterations = -1;
+    private double accuracy = -1;
 
     DetectorParameters parameters = new DetectorParameters();
     ArucoDetector detector;
@@ -44,31 +44,31 @@ public class ArucoDetectorParams {
     }
 
     public void setDecimation(float decimate) {
-        if (decimate == m_decimate) return;
+        if (decimate == this.decimate) return;
 
-        logger.info("Setting decimation from " + m_decimate + " to " + decimate);
+        logger.info("Setting decimation from " + this.decimate + " to " + decimate);
 
         // We only need to mutate the parameters -- the detector keeps a pointer to the parameters
         // object internally, so it should automatically update
         parameters.set_aprilTagQuadDecimate(decimate);
-        m_decimate = decimate;
+        this.decimate = decimate;
     }
 
     public void setCornerRefinementMaxIterations(int iters) {
-        if (iters == m_iterations || iters <= 0) return;
+        if (iters == iterations || iters <= 0) return;
 
         parameters.set_cornerRefinementMethod(Objdetect.CORNER_REFINE_SUBPIX);
         parameters.set_cornerRefinementMaxIterations(iters); // 200
 
-        m_iterations = iters;
+        iterations = iters;
     }
 
     public void setCornerAccuracy(double accuracy) {
-        if (accuracy == m_accuracy || accuracy <= 0) return;
+        if (accuracy == this.accuracy || accuracy <= 0) return;
 
         parameters.set_cornerRefinementMinAccuracy(
                 accuracy / 1000.0); // divides by 1000 because the UI multiplies it by 1000
-        m_accuracy = accuracy;
+        this.accuracy = accuracy;
     }
 
     public ArucoDetector getDetector() {

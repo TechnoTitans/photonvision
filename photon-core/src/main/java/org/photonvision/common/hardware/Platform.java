@@ -18,11 +18,12 @@
 package org.photonvision.common.hardware;
 
 import edu.wpi.first.util.RuntimeDetector;
+import org.photonvision.common.util.ShellExec;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import org.photonvision.common.util.ShellExec;
 
 @SuppressWarnings("unused")
 public enum Platform {

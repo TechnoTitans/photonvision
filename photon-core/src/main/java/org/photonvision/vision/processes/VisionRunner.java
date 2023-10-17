@@ -17,8 +17,6 @@
 
 package org.photonvision.vision.processes;
 
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import org.photonvision.common.logging.LogGroup;
 import org.photonvision.common.logging.Logger;
 import org.photonvision.vision.camera.QuirkyCamera;
@@ -27,6 +25,9 @@ import org.photonvision.vision.pipe.impl.HSVPipe;
 import org.photonvision.vision.pipeline.AdvancedPipelineSettings;
 import org.photonvision.vision.pipeline.CVPipeline;
 import org.photonvision.vision.pipeline.result.CVPipelineResult;
+
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /** VisionRunner has a frame supplier, a pipeline supplier, and a result consumer */
 @SuppressWarnings("rawtypes")
