@@ -20,6 +20,7 @@ package org.photonvision.common.dataflow.networktables;
 import edu.wpi.first.networktables.NetworkTableEvent;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.Subscriber;
+
 import java.util.EnumSet;
 import java.util.function.Consumer;
 

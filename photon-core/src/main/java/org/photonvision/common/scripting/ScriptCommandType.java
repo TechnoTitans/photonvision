@@ -18,10 +18,10 @@
 package org.photonvision.common.scripting;
 
 public enum ScriptCommandType {
-    kDefault(""),
-    kBashScript("bash"),
-    kPythonScript("python"),
-    kPython3Script("python3");
+    Default(""),
+    BashScript("bash"),
+    PythonScript("python"),
+    Python3Script("python3");
 
     public final String value;
 

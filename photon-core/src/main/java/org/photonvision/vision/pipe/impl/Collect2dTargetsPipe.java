@@ -17,13 +17,14 @@
 
 package org.photonvision.vision.pipe.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.opencv.core.Point;
 import org.photonvision.vision.frame.FrameStaticProperties;
 import org.photonvision.vision.opencv.DualOffsetValues;
 import org.photonvision.vision.pipe.CVPipe;
 import org.photonvision.vision.target.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /** Represents a pipe that collects available 2d targets. */
 public class Collect2dTargetsPipe

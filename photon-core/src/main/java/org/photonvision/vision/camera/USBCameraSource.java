@@ -22,8 +22,6 @@ import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoException;
 import edu.wpi.first.cscore.VideoMode;
-import java.util.*;
-import java.util.stream.Collectors;
 import org.photonvision.common.configuration.CameraConfiguration;
 import org.photonvision.common.configuration.ConfigManager;
 import org.photonvision.common.logging.LogGroup;
@@ -32,6 +30,9 @@ import org.photonvision.vision.frame.FrameProvider;
 import org.photonvision.vision.frame.provider.USBFrameProvider;
 import org.photonvision.vision.processes.VisionSource;
 import org.photonvision.vision.processes.VisionSourceSettables;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class USBCameraSource extends VisionSource {
     private final Logger logger;
@@ -77,7 +78,7 @@ public class USBCameraSource extends VisionSource {
         }
     }
 
-    void disableAutoFocus() {
+    private void disableAutoFocus() {
         if (cameraQuirks.hasQuirk(CameraQuirk.AdjustableFocus)) {
             try {
                 camera.getProperty("focus_auto").set(0);
@@ -102,6 +103,7 @@ public class USBCameraSource extends VisionSource {
         protected USBCameraSettables(CameraConfiguration configuration) {
             super(configuration);
             getAllVideoModes();
+            // TODO: figure out the sticky 5 fps bug
             setVideoMode(videoModes.get(0));
         }
 
@@ -177,12 +179,14 @@ public class USBCameraSource extends VisionSource {
         }
 
         @Override
-        public void setExposure(double exposure) {
+        public void setExposure(final double exposure) {
             if (exposure >= 0.0) {
                 try {
-                    int scaledExposure = 1;
+                    // no need to initialize to 1
+                    int scaledExposure;
                     if (cameraQuirks.hasQuirk(CameraQuirk.PiCam)) {
-                        scaledExposure = Math.round(timeToPiCamRawExposure(pctToExposureTimeUs(exposure)));
+                        // no need to round int
+                        scaledExposure = timeToPiCamRawExposure(pctToExposureTimeUs(exposure));
                         logger.debug("Setting camera raw exposure to " + scaledExposure);
                         camera.getProperty("raw_exposure_time_absolute").set(scaledExposure);
                         camera.getProperty("raw_exposure_time_absolute").set(scaledExposure);
@@ -200,24 +204,24 @@ public class USBCameraSource extends VisionSource {
         }
 
         @Override
-        public void setBrightness(int brightness) {
+        public void setBrightness(final int brightness) {
             try {
                 camera.setBrightness(brightness);
                 camera.setBrightness(brightness);
-            } catch (VideoException e) {
-                logger.error("Failed to set camera brightness!", e);
+            } catch (final VideoException videoException) {
+                logger.error("Failed to set camera brightness!", videoException);
             }
         }
 
         @Override
-        public void setGain(int gain) {
+        public void setGain(final int gain) {
             try {
                 if (cameraQuirks.hasQuirk(CameraQuirk.Gain)) {
                     camera.getProperty("gain_automatic").set(0);
                     camera.getProperty("gain").set(gain);
                 }
-            } catch (VideoException e) {
-                logger.error("Failed to set camera gain!", e);
+            } catch (final VideoException videoException) {
+                logger.error("Failed to set camera gain!", videoException);
             }
         }
 
@@ -227,14 +231,16 @@ public class USBCameraSource extends VisionSource {
         }
 
         @Override
-        public void setVideoModeInternal(VideoMode videoMode) {
+        public void setVideoModeInternal(final VideoMode videoMode) {
+            // move this out, no need to be inside a try block
+            if (videoMode == null) {
+                logger.error("Got a null video mode! Doing nothing...");
+                return;
+            }
+
             try {
-                if (videoMode == null) {
-                    logger.error("Got a null video mode! Doing nothing...");
-                    return;
-                }
                 camera.setVideoMode(videoMode);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 logger.error("Failed to set video mode!", e);
             }
         }
@@ -266,7 +272,8 @@ public class USBCameraSource extends VisionSource {
                     } else {
                         modes = camera.enumerateVideoModes();
                     }
-                    for (VideoMode videoMode : modes) {
+
+                    for (final VideoMode videoMode : modes) {
                         // Filter grey modes
                         if (videoMode.pixelFormat == VideoMode.PixelFormat.kGray
                                 || videoMode.pixelFormat == VideoMode.PixelFormat.kUnknown) {
@@ -307,7 +314,7 @@ public class USBCameraSource extends VisionSource {
                         // duplicateModes.remove(duplicateModes.size() - 1);
                         // videoModesList.removeAll(duplicateModes);
                     }
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     logger.error("Exception while enumerating video modes!", e);
                     videoModesList = List.of();
                 }
@@ -330,6 +337,7 @@ public class USBCameraSource extends VisionSource {
                     videoModes.put(sortedList.indexOf(videoMode), videoMode);
                 }
             }
+
             return videoModes;
         }
     }
@@ -342,7 +350,7 @@ public class USBCameraSource extends VisionSource {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         USBCameraSource that = (USBCameraSource) o;

@@ -17,12 +17,13 @@
 
 package org.photonvision.vision.pipe.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.photonvision.vision.frame.FrameStaticProperties;
 import org.photonvision.vision.opencv.CVShape;
 import org.photonvision.vision.opencv.ContourShape;
 import org.photonvision.vision.pipe.CVPipe;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FilterShapesPipe
         extends CVPipe<List<CVShape>, List<CVShape>, FilterShapesPipe.FilterShapesPipeParams> {

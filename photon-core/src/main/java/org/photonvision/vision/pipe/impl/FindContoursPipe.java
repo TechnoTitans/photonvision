@@ -17,14 +17,15 @@
 
 package org.photonvision.vision.pipe.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.imgproc.Imgproc;
 import org.photonvision.vision.opencv.Contour;
 import org.photonvision.vision.pipe.CVPipe;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class FindContoursPipe
         extends CVPipe<Mat, List<Contour>, FindContoursPipe.FindContoursParams> {

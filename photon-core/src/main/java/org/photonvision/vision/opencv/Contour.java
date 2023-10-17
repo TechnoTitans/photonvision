@@ -17,14 +17,15 @@
 
 package org.photonvision.vision.opencv;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
 import org.jetbrains.annotations.Nullable;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 import org.photonvision.common.util.math.MathUtils;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
 
 public class Contour implements Releasable {
     public static final Comparator<Contour> SortByMomentsX =

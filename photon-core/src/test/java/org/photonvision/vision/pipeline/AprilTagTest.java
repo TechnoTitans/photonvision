@@ -18,7 +18,6 @@
 package org.photonvision.vision.pipeline;
 
 import edu.wpi.first.math.geometry.Translation3d;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +28,8 @@ import org.photonvision.vision.frame.provider.FileFrameProvider;
 import org.photonvision.vision.pipeline.result.CVPipelineResult;
 import org.photonvision.vision.target.TargetModel;
 import org.photonvision.vision.target.TrackedTarget;
+
+import java.util.stream.Collectors;
 
 public class AprilTagTest {
     @BeforeEach
@@ -46,7 +47,7 @@ public class AprilTagTest {
         pipeline.getSettings().cornerDetectionAccuracyPercentage = 4;
         pipeline.getSettings().cornerDetectionUseConvexHulls = true;
         pipeline.getSettings().targetModel = TargetModel.k200mmAprilTag;
-        pipeline.getSettings().tagFamily = AprilTagFamily.kTag36h11;
+        pipeline.getSettings().tagFamily = AprilTagFamily.Tag36h11;
 
         var frameProvider =
                 new FileFrameProvider(
@@ -101,7 +102,7 @@ public class AprilTagTest {
         pipeline.getSettings().cornerDetectionAccuracyPercentage = 4;
         pipeline.getSettings().cornerDetectionUseConvexHulls = true;
         pipeline.getSettings().targetModel = TargetModel.k200mmAprilTag;
-        pipeline.getSettings().tagFamily = AprilTagFamily.kTag16h5;
+        pipeline.getSettings().tagFamily = AprilTagFamily.Tag16h5;
 
         var frameProvider =
                 new FileFrameProvider(

@@ -29,6 +29,8 @@ import org.opencv.core.MatOfDouble;
 import org.photonvision.common.dataflow.structures.Packet;
 import org.photonvision.vision.opencv.Releasable;
 
+import java.util.Arrays;
+
 public class JsonMat implements Releasable {
     public final int rows;
     public final int cols;
@@ -64,13 +66,13 @@ public class JsonMat implements Releasable {
         return mat.type() == CvType.CV_64FC1 && mat.cols() == 5 && mat.rows() == 1;
     }
 
-    private static boolean isCalibrationMat(Mat mat) {
-        return isDistortionCoeffsMat(mat) || isCameraMatrixMat(mat);
+    private static boolean isNotCalibrationMat(Mat mat) {
+        return !isDistortionCoeffsMat(mat) && !isCameraMatrixMat(mat);
     }
 
     @JsonIgnore
     public static double[] getDataFromMat(Mat mat) {
-        if (!isCalibrationMat(mat)) return null;
+        if (isNotCalibrationMat(mat)) return null;
 
         double[] data = new double[(int) (mat.total() * mat.elemSize())];
         mat.get(0, 0, data);
@@ -85,7 +87,7 @@ public class JsonMat implements Releasable {
     }
 
     public static JsonMat fromMat(Mat mat) {
-        if (!isCalibrationMat(mat)) return null;
+        if (isNotCalibrationMat(mat)) return null;
         return new JsonMat(mat.rows(), mat.cols(), getDataFromMat(mat));
     }
 
@@ -122,6 +124,7 @@ public class JsonMat implements Releasable {
         getAsMat().release();
     }
 
+    @SuppressWarnings("unused")
     public Packet populatePacket(Packet packet) {
         packet.encode(this.data);
         return packet;

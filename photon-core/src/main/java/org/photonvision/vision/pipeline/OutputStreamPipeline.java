@@ -17,7 +17,6 @@
 
 package org.photonvision.vision.pipeline;
 
-import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.photonvision.vision.frame.Frame;
 import org.photonvision.vision.frame.FrameStaticProperties;
@@ -26,6 +25,8 @@ import org.photonvision.vision.pipe.impl.*;
 import org.photonvision.vision.pipeline.result.CVPipelineResult;
 import org.photonvision.vision.target.TargetModel;
 import org.photonvision.vision.target.TrackedTarget;
+
+import java.util.List;
 
 /**
  * This is a "fake" pipeline that is just used to move identical pipe sets out of real pipelines. It

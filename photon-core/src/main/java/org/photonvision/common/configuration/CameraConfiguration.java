@@ -20,9 +20,6 @@ package org.photonvision.common.configuration;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import org.photonvision.common.logging.LogGroup;
 import org.photonvision.common.logging.Logger;
 import org.photonvision.vision.calibration.CameraCalibrationCoefficients;
@@ -31,20 +28,24 @@ import org.photonvision.vision.pipeline.CVPipelineSettings;
 import org.photonvision.vision.pipeline.DriverModePipelineSettings;
 import org.photonvision.vision.processes.PipelineManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class CameraConfiguration {
     private static final Logger logger = new Logger(CameraConfiguration.class, LogGroup.Camera);
 
     /** Name as reported by CSCore */
-    public String baseName = "";
+    public String baseName;
 
     /** Name used to title the subfolder of this config */
-    public String uniqueName = "";
+    public String uniqueName;
 
     /** User-set nickname */
-    public String nickname = "";
+    public String nickname;
 
     /** Can be either path (ex /dev/videoX) or index (ex 1). */
-    public String path = "";
+    public String path;
 
     @JsonIgnore public String[] otherPaths = {};
 

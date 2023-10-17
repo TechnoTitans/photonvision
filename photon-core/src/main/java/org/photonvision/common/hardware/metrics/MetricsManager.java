@@ -17,9 +17,6 @@
 
 package org.photonvision.common.hardware.metrics;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.HashMap;
 import org.photonvision.common.configuration.HardwareConfig;
 import org.photonvision.common.dataflow.DataChangeService;
 import org.photonvision.common.dataflow.events.OutgoingUIEvent;
@@ -31,6 +28,10 @@ import org.photonvision.common.hardware.metrics.cmds.PiCmds;
 import org.photonvision.common.logging.LogGroup;
 import org.photonvision.common.logging.Logger;
 import org.photonvision.common.util.ShellExec;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.HashMap;
 
 public class MetricsManager {
     final Logger logger = new Logger(MetricsManager.class, LogGroup.General);

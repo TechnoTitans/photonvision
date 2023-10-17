@@ -17,10 +17,11 @@
 
 package org.photonvision.vision.processes;
 
-import java.util.*;
-import java.util.stream.Collectors;
 import org.photonvision.common.logging.LogGroup;
 import org.photonvision.common.logging.Logger;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /** VisionModuleManager has many VisionModules, and provides camera configuration data to them. */
 public class VisionModuleManager {

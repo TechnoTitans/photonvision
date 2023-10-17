@@ -18,17 +18,17 @@
 package org.photonvision.common.scripting;
 
 public enum ScriptEventType {
-    kProgramInit("Program Init"),
-    kProgramExit("Program Exit"),
-    kNTConnected("NT Connected"),
-    kLEDOn("LED On"),
-    kLEDOff("LED Off"),
-    kEnterDriverMode("Enter Driver Mode"),
-    kExitDriverMode("Exit Driver Mode"),
-    kFoundTarget("Found Target"),
-    kFoundMultipleTarget("Found Multiple Target"),
-    kLostTarget("Lost Target"),
-    kPipelineLag("Pipeline Lag");
+    ProgramInit("Program Init"),
+    ProgramExit("Program Exit"),
+    NTConnected("NT Connected"),
+    LEDOn("LED On"),
+    LEDOff("LED Off"),
+    EnterDriverMode("Enter Driver Mode"),
+    ExitDriverMode("Exit Driver Mode"),
+    FoundTarget("Found Target"),
+    FoundMultipleTarget("Found Multiple Target"),
+    LostTarget("Lost Target"),
+    PipelineLag("Pipeline Lag");
 
     public final String value;
 

@@ -17,8 +17,9 @@
 
 package org.photonvision.common.util;
 
-import java.awt.*;
 import org.opencv.core.Scalar;
+
+import java.awt.*;
 
 public class ColorHelper {
     public static Scalar colorToScalar(Color color) {

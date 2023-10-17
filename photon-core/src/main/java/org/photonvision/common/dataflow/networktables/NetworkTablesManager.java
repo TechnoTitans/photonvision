@@ -39,6 +39,9 @@ import org.photonvision.common.scripting.ScriptManager;
 import org.photonvision.common.util.TimedTaskManager;
 import org.photonvision.common.util.file.JacksonUtils;
 
+import java.util.HashMap;
+import java.util.function.Consumer;
+
 public class NetworkTablesManager {
     private final NetworkTableInstance ntInstance = NetworkTableInstance.getDefault();
     private final String kRootTableName = "/photonvision";
@@ -105,6 +108,10 @@ public class NetworkTablesManager {
 
                 hasReportedConnectionFailure = false;
                 ScriptManager.queueEvent(ScriptEventType.kNTConnected);
+              
+                lastConnectMessageMillis = System.currentTimeMillis();
+                ScriptManager.queueEvent(ScriptEventType.NTConnected);
+              
                 getInstance().broadcastVersion();
                 getInstance().broadcastConnectedStatus();
             }

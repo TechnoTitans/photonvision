@@ -17,7 +17,6 @@
 
 package org.photonvision.vision.pipeline;
 
-import java.util.List;
 import org.photonvision.vision.frame.Frame;
 import org.photonvision.vision.frame.FrameThresholdType;
 import org.photonvision.vision.opencv.Contour;
@@ -28,6 +27,8 @@ import org.photonvision.vision.pipeline.result.CVPipelineResult;
 import org.photonvision.vision.target.PotentialTarget;
 import org.photonvision.vision.target.TargetOrientation;
 import org.photonvision.vision.target.TrackedTarget;
+
+import java.util.List;
 
 /** Represents a pipeline for tracking retro-reflective targets. */
 public class ReflectivePipeline extends CVPipeline<CVPipelineResult, ReflectivePipelineSettings> {

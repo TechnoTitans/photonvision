@@ -17,8 +17,6 @@
 
 package org.photonvision.vision.pipe.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -27,6 +25,9 @@ import org.opencv.imgproc.Moments;
 import org.photonvision.vision.opencv.CVShape;
 import org.photonvision.vision.opencv.Contour;
 import org.photonvision.vision.pipe.CVPipe;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FindCirclesPipe
         extends CVPipe<Pair<Mat, List<Contour>>, List<CVShape>, FindCirclesPipe.FindCirclePipeParams> {

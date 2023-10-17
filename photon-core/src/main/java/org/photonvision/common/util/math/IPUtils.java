@@ -20,6 +20,7 @@ package org.photonvision.common.util.math;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class IPUtils {
     public static boolean isValidIPV4(final String ip) {
         String PATTERN =

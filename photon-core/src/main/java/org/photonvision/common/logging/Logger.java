@@ -17,17 +17,18 @@
 
 package org.photonvision.common.logging;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.photonvision.common.configuration.ConfigManager;
+import org.photonvision.common.dataflow.DataChangeService;
+import org.photonvision.common.dataflow.events.OutgoingUIEvent;
+import org.photonvision.common.util.TimedTaskManager;
+
 import java.io.*;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Supplier;
-import org.apache.commons.lang3.tuple.Pair;
-import org.photonvision.common.configuration.ConfigManager;
-import org.photonvision.common.dataflow.DataChangeService;
-import org.photonvision.common.dataflow.events.OutgoingUIEvent;
-import org.photonvision.common.util.TimedTaskManager;
 
 @SuppressWarnings("unused")
 public class Logger {
@@ -108,14 +109,14 @@ public class Logger {
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void addFileAppender(Path logFilePath) {
+    public static void addFileAppender(final Path logFilePath) {
         var file = logFilePath.toFile();
         if (!file.exists()) {
             try {
                 file.getParentFile().mkdirs();
                 file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (final IOException ioException) {
+                Logger.log("Failed to create file!", LogLevel.WARN, LogGroup.General, Logger.class.getName());
             }
         }
         currentAppenders.add(new FileLogAppender(logFilePath));
@@ -157,7 +158,8 @@ public class Logger {
                 logCounter++;
             } else {
                 // Delete this file.
-                file.delete();
+                final boolean success = file.delete();
+                Logger.log("Failed to delete file!", LogLevel.WARN, LogGroup.General, Logger.class.getName());
             }
         }
     }
@@ -200,6 +202,7 @@ public class Logger {
         }
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void log(String message, LogLevel messageLevel, LogLevel conditionalLevel) {
         if (shouldLog(conditionalLevel)) {
             log(message, messageLevel, group, className);
@@ -231,8 +234,8 @@ public class Logger {
      * Logs an error message with the stack trace of a Throwable. The stacktrace will only be printed
      * if the current LogLevel is TRACE
      *
-     * @param message
-     * @param t
+     * @param message the message to log
+     * @param t the throwable cause
      */
     public void error(String message, Throwable t) {
         log(message + ": " + t.getMessage(), LogLevel.ERROR);
@@ -331,14 +334,19 @@ public class Logger {
         }
 
         @Override
-        public void log(String message, LogLevel level) {
-            message += "\n";
+        public void log(final String message, final LogLevel level) {
+            final String nextLineMessage = message + "\n";
             try {
-                out.write(message.getBytes());
+                out.write(nextLineMessage.getBytes());
                 wantsFlush = true;
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (NullPointerException e) {
+            } catch (final IOException ioException) {
+                Logger.log(
+                        "Failed to write to OutputStream!",
+                        LogLevel.WARN,
+                        LogGroup.General,
+                        FileLogAppender.class.getName()
+                );
+            } catch (final NullPointerException nullPointerException) {
                 // Nothing to do - no stream available for writing
             }
         }

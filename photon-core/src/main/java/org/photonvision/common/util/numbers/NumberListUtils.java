@@ -23,23 +23,24 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.StringJoiner;
 
-@SuppressWarnings("unused")
 public class NumberListUtils {
     /**
      * @param collection an ArrayList of Comparable objects
      * @return the median of collection
      */
+    @SuppressWarnings("unused")
     public static <T extends Number> double median(List<T> collection, Comparator<T> comp) {
-        double result;
         int n = collection.size() / 2;
 
-        if (collection.size() % 2 == 0) // even number of items; find the middle two and average them
-        result =
+        final double result;
+        if (collection.size() % 2 == 0) { // even number of items; find the middle two and average them
+            result =
                     (nthSmallest(collection, n - 1, comp).doubleValue()
-                                    + nthSmallest(collection, n, comp).doubleValue())
+                            + nthSmallest(collection, n, comp).doubleValue())
                             / 2.0;
-        else // odd number of items; return the one in the middle
-        result = nthSmallest(collection, n, comp).doubleValue();
+        } else { // odd number of items; return the one in the middle
+            result = nthSmallest(collection, n, comp).doubleValue();
+        }
 
         return result;
     }
@@ -76,7 +77,7 @@ public class NumberListUtils {
      * @return the nth smallest object
      */
     public static <T> T nthSmallest(List<T> collection, int n, Comparator<T> comp) {
-        T result, pivot;
+        final T result, pivot;
         ArrayList<T> underPivot = new ArrayList<>(),
                 overPivot = new ArrayList<>(),
                 equalPivot = new ArrayList<>();
@@ -88,8 +89,7 @@ public class NumberListUtils {
         pivot = collection.get(n / 2);
 
         // split collection into 3 lists based on comparison with the pivot
-
-        for (T obj : collection) {
+        for (final T obj : collection) {
             int order = comp.compare(obj, pivot);
 
             if (order < 0) // obj < pivot
@@ -102,12 +102,15 @@ public class NumberListUtils {
 
         // recurse on the appropriate collection
 
-        if (n < underPivot.size()) result = nthSmallest(underPivot, n, comp);
-        else if (n < underPivot.size() + equalPivot.size()) // equal to pivot; just return it
-        result = pivot;
-        else // everything in underPivot and equalPivot is too small.  Adjust n accordingly in the
+        if (n < underPivot.size()) {
+            result = nthSmallest(underPivot, n, comp);
+        } else if (n < underPivot.size() + equalPivot.size()) {
+            // equal to pivot; just return it
+            result = pivot;
+        } else {// everything in underPivot and equalPivot is too small.  Adjust n accordingly in the
             // recursion.
             result = nthSmallest(overPivot, n - underPivot.size() - equalPivot.size(), comp);
+        }
 
         return result;
     }

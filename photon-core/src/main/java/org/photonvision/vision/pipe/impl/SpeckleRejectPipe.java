@@ -17,10 +17,11 @@
 
 package org.photonvision.vision.pipe.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.photonvision.vision.opencv.Contour;
 import org.photonvision.vision.pipe.CVPipe;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SpeckleRejectPipe
         extends CVPipe<List<Contour>, List<Contour>, SpeckleRejectPipe.SpeckleRejectParams> {

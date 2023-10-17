@@ -43,8 +43,6 @@ public class LibcameraGpuFrameProvider implements FrameProvider {
         return "AcceleratedPicamFrameProvider";
     }
 
-    int i = 0;
-
     @Override
     public Frame get() {
         // We need to make sure that other threads don't try to change video modes while we're waiting

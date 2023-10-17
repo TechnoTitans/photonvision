@@ -17,8 +17,9 @@
 
 package org.photonvision.vision.pipe.impl;
 
-import java.awt.*;
 import org.photonvision.vision.frame.FrameDivisor;
+
+import java.awt.*;
 
 public class Draw2dAprilTagsPipe extends Draw2dTargetsPipe {
     public static class Draw2dAprilTagsParams extends Draw2dTargetsPipe.Draw2dTargetsParams {

@@ -33,9 +33,7 @@ package org.photonvision.common;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.photonvision.common.util.TestUtils;
@@ -51,6 +49,10 @@ import org.photonvision.vision.opencv.ContourShape;
 import org.photonvision.vision.pipeline.CVPipeline;
 import org.photonvision.vision.pipeline.ColoredShapePipeline;
 import org.photonvision.vision.pipeline.result.CVPipelineResult;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /** Various tests that check performance on long-running tasks (i.e. a pipeline) */
 public class ShapeBenchmarkTest {
