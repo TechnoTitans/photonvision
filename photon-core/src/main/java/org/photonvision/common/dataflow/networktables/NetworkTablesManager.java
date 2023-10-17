@@ -39,28 +39,22 @@ import org.photonvision.common.scripting.ScriptManager;
 import org.photonvision.common.util.TimedTaskManager;
 import org.photonvision.common.util.file.JacksonUtils;
 
-import java.util.HashMap;
-import java.util.function.Consumer;
-
 public class NetworkTablesManager {
     private final NetworkTableInstance ntInstance = NetworkTableInstance.getDefault();
     private final String kRootTableName = "/photonvision";
-    private final String kFieldLayoutName = "apriltag_field_layout";
     public final NetworkTable kRootTable = ntInstance.getTable(kRootTableName);
 
-    private final NTLogger m_ntLogger = new NTLogger();
-
-    private boolean m_isRetryingConnection = false;
-
-    private StringSubscriber m_fieldLayoutSubscriber =
-            kRootTable.getStringTopic(kFieldLayoutName).subscribe("");
+    private boolean isRetryingConnection = false;
 
     private NetworkTablesManager() {
         ntInstance.addLogger(255, 255, (event) -> {}); // to hide error messages
+        NTLogger m_ntLogger = new NTLogger();
         ntInstance.addConnectionListener(true, m_ntLogger); // to hide error messages
 
+        String kFieldLayoutName = "apriltag_field_layout";
+        final StringSubscriber fieldLayoutSubscriber = kRootTable.getStringTopic(kFieldLayoutName).subscribe("");
         ntInstance.addListener(
-                m_fieldLayoutSubscriber, EnumSet.of(Kind.kValueAll), this::onFieldLayoutChanged);
+                fieldLayoutSubscriber, EnumSet.of(Kind.kValueAll), this::onFieldLayoutChanged);
 
         TimedTaskManager.getInstance().addTask("NTManager", this::ntTick, 5000);
 
@@ -107,10 +101,8 @@ public class NetworkTablesManager {
                 logger.info(msg);
 
                 hasReportedConnectionFailure = false;
-                lastConnectMessageMillis = System.currentTimeMillis();
                 ScriptManager.queueEvent(ScriptEventType.NTConnected);
-                ScriptManager.queueEvent(ScriptEventType.kNTConnected);
-              
+
                 getInstance().broadcastVersion();
                 getInstance().broadcastConnectedStatus();
             }
@@ -175,10 +167,10 @@ public class NetworkTablesManager {
         ntInstance.startClient4("photonvision");
         try {
             int t = Integer.parseInt(ntServerAddress);
-            if (!m_isRetryingConnection) logger.info("Starting NT Client, server team is " + t);
+            if (!isRetryingConnection) logger.info("Starting NT Client, server team is " + t);
             ntInstance.setServerTeam(t);
         } catch (NumberFormatException e) {
-            if (!m_isRetryingConnection)
+            if (!isRetryingConnection)
                 logger.info("Starting NT Client, server IP is \"" + ntServerAddress + "\"");
             ntInstance.setServer(ntServerAddress);
         }
@@ -204,8 +196,8 @@ public class NetworkTablesManager {
             setConfig(ConfigManager.getInstance().getConfig().getNetworkConfig());
         }
 
-        if (!ntInstance.isConnected() && !m_isRetryingConnection) {
-            m_isRetryingConnection = true;
+        if (!ntInstance.isConnected() && !isRetryingConnection) {
+            isRetryingConnection = true;
             logger.error(
                     "[NetworkTablesManager] Could not connect to the robot! Will retry in the background...");
         }

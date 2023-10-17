@@ -266,7 +266,7 @@ public class ConfigManager {
     }
 
     public boolean saveUploadedAprilTagFieldLayout(Path uploadPath) {
-        return m_provider.saveUploadedAprilTagFieldLayout(uploadPath);
+        return provider.saveUploadedAprilTagFieldLayout(uploadPath);
     }
 
     public void requestSave() {

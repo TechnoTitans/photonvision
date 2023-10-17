@@ -269,7 +269,7 @@ public class DataSocketHandler {
                             {
                                 var takeInputSnapshotEvent =
                                         new IncomingWebSocketEvent<>(
-                                                DataChangeDestination.DCD_ACTIVEMODULE,
+                                                DataChangeDestination.DCD_ACTIVE_MODULE,
                                                 "saveInputSnapshot",
                                                 0,
                                                 cameraIndex,
@@ -281,7 +281,7 @@ public class DataSocketHandler {
                             {
                                 var takeOutputSnapshotEvent =
                                         new IncomingWebSocketEvent<>(
-                                                DataChangeDestination.DCD_ACTIVEMODULE,
+                                                DataChangeDestination.DCD_ACTIVE_MODULE,
                                                 "saveOutputSnapshot",
                                                 0,
                                                 cameraIndex,
