@@ -17,7 +17,6 @@
 
 package org.photonvision.vision.pipeline;
 
-import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.photonvision.common.util.math.MathUtils;
 import org.photonvision.raspi.LibCameraJNI;
@@ -29,6 +28,8 @@ import org.photonvision.vision.pipe.impl.Draw2dCrosshairPipe;
 import org.photonvision.vision.pipe.impl.ResizeImagePipe;
 import org.photonvision.vision.pipe.impl.RotateImagePipe;
 import org.photonvision.vision.pipeline.result.DriverModePipelineResult;
+
+import java.util.List;
 
 public class DriverModePipeline
         extends CVPipeline<DriverModePipelineResult, DriverModePipelineSettings> {

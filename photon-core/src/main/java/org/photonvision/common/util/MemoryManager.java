@@ -53,7 +53,8 @@ public class MemoryManager {
 
     private void collect() {
         System.gc();
-        System.runFinalization();
+        // I don't think we even need to call this, its uber deprecated
+        // System.runFinalization();
     }
 
     public void run() {

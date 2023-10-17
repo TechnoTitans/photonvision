@@ -17,8 +17,9 @@
 
 package org.photonvision.common.hardware;
 
-import java.io.IOException;
 import org.photonvision.common.util.ShellExec;
+
+import java.io.IOException;
 
 public enum PiVersion {
     PI_B("Pi Model B"),

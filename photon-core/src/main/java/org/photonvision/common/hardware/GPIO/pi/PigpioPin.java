@@ -30,7 +30,7 @@ public class PigpioPin extends GPIOBase {
 
     private boolean hasFailedHardwarePWM;
 
-    public PigpioPin(int pinNo) {
+    public PigpioPin(final int pinNo) {
         isHardwarePWMPin = pinNo == 12 || pinNo == 13 || pinNo == 17 || pinNo == 18;
         this.pinNo = pinNo;
     }

@@ -17,13 +17,14 @@
 
 package org.photonvision.vision.processes;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.photonvision.common.util.TestUtils;
 import org.photonvision.vision.pipeline.DriverModePipelineSettings;
 import org.photonvision.vision.pipeline.PipelineType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PipelineManagerTest {
     @Test

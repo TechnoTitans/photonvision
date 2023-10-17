@@ -17,9 +17,6 @@
 
 package org.photonvision.common;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -35,6 +32,10 @@ import org.photonvision.vision.opencv.ContourIntersectionDirection;
 import org.photonvision.vision.pipeline.CVPipeline;
 import org.photonvision.vision.pipeline.ReflectivePipeline;
 import org.photonvision.vision.pipeline.result.CVPipelineResult;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /** Various tests that check performance on long-running tasks (i.e. a pipeline) */
 public class BenchmarkTest {

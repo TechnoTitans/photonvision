@@ -17,10 +17,11 @@
 
 package org.photonvision.common.util;
 
-import java.util.concurrent.*;
 import org.jetbrains.annotations.NotNull;
 import org.photonvision.common.logging.LogGroup;
 import org.photonvision.common.logging.Logger;
+
+import java.util.concurrent.*;
 
 public class TimedTaskManager {
     private static final Logger logger = new Logger(TimedTaskManager.class, LogGroup.General);

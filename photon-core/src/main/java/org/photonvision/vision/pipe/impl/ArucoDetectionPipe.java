@@ -18,12 +18,13 @@
 package org.photonvision.vision.pipe.impl;
 
 import edu.wpi.first.math.util.Units;
-import java.util.List;
 import org.opencv.core.Mat;
 import org.opencv.objdetect.DetectorParameters;
 import org.photonvision.vision.aruco.ArucoDetectionResult;
 import org.photonvision.vision.aruco.PhotonArucoDetector;
 import org.photonvision.vision.pipe.CVPipe;
+
+import java.util.List;
 
 public class ArucoDetectionPipe
         extends CVPipe<Mat, List<ArucoDetectionResult>, ArucoDetectionPipeParams> {

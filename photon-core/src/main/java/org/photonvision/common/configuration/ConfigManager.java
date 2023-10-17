@@ -17,6 +17,12 @@
 
 package org.photonvision.common.configuration;
 
+import org.photonvision.common.logging.LogGroup;
+import org.photonvision.common.logging.Logger;
+import org.photonvision.common.util.file.FileUtils;
+import org.photonvision.vision.processes.VisionSource;
+import org.zeroturnaround.zip.ZipUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,28 +36,16 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 import java.util.List;
-import org.photonvision.common.logging.LogGroup;
-import org.photonvision.common.logging.Logger;
-import org.photonvision.common.util.file.FileUtils;
-import org.photonvision.vision.processes.VisionSource;
-import org.zeroturnaround.zip.ZipUtil;
 
 public class ConfigManager {
     private static final Logger logger = new Logger(ConfigManager.class, LogGroup.General);
     private static ConfigManager INSTANCE;
 
-    public static final String HW_CFG_FNAME = "hardwareConfig.json";
-    public static final String HW_SET_FNAME = "hardwareSettings.json";
-    public static final String NET_SET_FNAME = "networkSettings.json";
-
-    final File configDirectoryFile;
-
-    private final ConfigProvider m_provider;
-
-    private final Thread settingsSaveThread;
+    private final ConfigProvider provider;
+    public final File configDirectoryFile;
     private long saveRequestTimestamp = -1;
 
-    enum ConfigSaveStrategy {
+    public enum ConfigSaveStrategy {
         SQL,
         LEGACY,
         ATOMIC_ZIP
@@ -80,7 +74,7 @@ public class ConfigManager {
     }
 
     private void translateLegacyIfPresent(Path folderPath) {
-        if (!(m_provider instanceof SqlConfigProvider)) {
+        if (!(provider instanceof SqlConfigProvider)) {
             // Cannot import into SQL if we aren't in SQL mode rn
             return;
         }
@@ -97,23 +91,25 @@ public class ConfigManager {
             // yeet our current cameras directory, not needed anymore
             if (maybeCamsBak.exists()) FileUtils.deleteDirectory(maybeCamsBak.toPath());
             if (!maybeCams.canWrite()) {
-                maybeCams.setWritable(true);
+                final boolean success = maybeCams.setWritable(true);
+                if (!success) {
+                    logger.warn("Failed to make CamerasFile writable!");
+                }
             }
 
             try {
                 Files.move(maybeCams.toPath(), maybeCamsBak.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                logger.error("Exception moving cameras to cameras_bak!", e);
+            } catch (IOException ioException) {
+                logger.error("Exception moving cameras to cameras_bak!", ioException);
 
                 // Try to just copy from cams to cams-bak instead of moving? Windows sometimes needs us to
                 // do that
                 try {
                     org.apache.commons.io.FileUtils.copyDirectory(maybeCams, maybeCamsBak);
-                } catch (IOException e1) {
+                } catch (final IOException otherIoException) {
                     // So we can't move to cams_bak, and we can't copy and delete either? We just have to give
                     // up here on preserving the old folder
-                    logger.error("Exception while backup-copying cameras to cameras_bak!", e);
-                    e1.printStackTrace();
+                    logger.error("Exception while backup-copying cameras to cameras_bak!", otherIoException);
                 }
 
                 // Delete the directory because we were successfully able to load the config but were unable
@@ -131,7 +127,11 @@ public class ConfigManager {
     public static boolean saveUploadedSettingsZip(File uploadPath) {
         // Unpack to /tmp/something/photonvision
         var folderPath = Path.of(System.getProperty("java.io.tmpdir"), "photonvision").toFile();
-        folderPath.mkdirs();
+        final boolean success = folderPath.mkdirs();
+        if (!success) {
+            logger.warn("Failed to mkdir at folder!");
+        }
+
         ZipUtil.unpack(uploadPath, folderPath);
 
         // Nuke the current settings directory
@@ -162,7 +162,7 @@ public class ConfigManager {
     }
 
     public PhotonConfiguration getConfig() {
-        return m_provider.getConfig();
+        return provider.getConfig();
     }
 
     private static Path getRootFolder() {
@@ -171,15 +171,15 @@ public class ConfigManager {
 
     ConfigManager(Path configDirectory, ConfigProvider provider) {
         this.configDirectoryFile = new File(configDirectory.toUri());
-        m_provider = provider;
+        this.provider = provider;
 
-        settingsSaveThread = new Thread(this::saveAndWriteTask);
+        Thread settingsSaveThread = new Thread(this::saveAndWriteTask);
         settingsSaveThread.start();
     }
 
     public void load() {
         translateLegacyIfPresent(this.configDirectoryFile.toPath());
-        m_provider.load();
+        provider.load();
     }
 
     public void addCameraConfigurations(List<VisionSource> sources) {
@@ -196,8 +196,8 @@ public class ConfigManager {
         File out = Path.of(System.getProperty("java.io.tmpdir"), "photonvision-settings.zip").toFile();
         try {
             ZipUtil.pack(configDirectoryFile, out);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception exception) {
+            logger.error("Failed to pack zip file!", exception);
         }
         return out;
     }
@@ -233,26 +233,36 @@ public class ConfigManager {
 
     public Path getLogPath() {
         var logFile = Path.of(this.getLogsDir().toString(), taToLogFname(LocalDateTime.now())).toFile();
-        if (!logFile.getParentFile().exists()) logFile.getParentFile().mkdirs();
+        if (!logFile.getParentFile().exists()) {
+            final boolean success = logFile.getParentFile().mkdirs();
+            if (!success) {
+                logger.warn("Failed to mkdir at LogPath!");
+            }
+        }
         return logFile.toPath();
     }
 
     public Path getImageSavePath() {
         var imgFilePath = Path.of(configDirectoryFile.toString(), "imgSaves").toFile();
-        if (!imgFilePath.exists()) imgFilePath.mkdirs();
+        if (!imgFilePath.exists()) {
+            final boolean success = imgFilePath.mkdirs();
+            if (!success) {
+                logger.warn("Failed to mkdir at ImageSavePath!");
+            }
+        }
         return imgFilePath.toPath();
     }
 
     public boolean saveUploadedHardwareConfig(Path uploadPath) {
-        return m_provider.saveUploadedHardwareConfig(uploadPath);
+        return provider.saveUploadedHardwareConfig(uploadPath);
     }
 
     public boolean saveUploadedHardwareSettings(Path uploadPath) {
-        return m_provider.saveUploadedHardwareSettings(uploadPath);
+        return provider.saveUploadedHardwareSettings(uploadPath);
     }
 
     public boolean saveUploadedNetworkConfig(Path uploadPath) {
-        return m_provider.saveUploadedNetworkConfig(uploadPath);
+        return provider.saveUploadedNetworkConfig(uploadPath);
     }
 
     public boolean saveUploadedAprilTagFieldLayout(Path uploadPath) {
@@ -270,12 +280,12 @@ public class ConfigManager {
 
     public void clearConfig() {
         logger.info("Clearing configuration!");
-        m_provider.clearConfig();
-        m_provider.saveToDisk();
+        provider.clearConfig();
+        provider.saveToDisk();
     }
 
     public void saveToDisk() {
-        m_provider.saveToDisk();
+        provider.saveToDisk();
     }
 
     private void saveAndWriteTask() {

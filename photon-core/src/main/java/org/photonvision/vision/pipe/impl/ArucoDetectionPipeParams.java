@@ -17,9 +17,10 @@
 
 package org.photonvision.vision.pipe.impl;
 
-import java.util.Objects;
 import org.opencv.objdetect.ArucoDetector;
 import org.photonvision.vision.calibration.CameraCalibrationCoefficients;
+
+import java.util.Objects;
 
 public class ArucoDetectionPipeParams {
     public ArucoDetector detectorParams;

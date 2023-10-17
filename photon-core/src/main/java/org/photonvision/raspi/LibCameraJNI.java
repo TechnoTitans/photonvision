@@ -17,14 +17,15 @@
 
 package org.photonvision.raspi;
 
+import org.photonvision.common.logging.LogGroup;
+import org.photonvision.common.logging.Logger;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.photonvision.common.logging.LogGroup;
-import org.photonvision.common.logging.Logger;
 
 public class LibCameraJNI {
     private static boolean libraryLoaded = false;
@@ -109,11 +110,11 @@ public class LibCameraJNI {
     // ======================================================== //
 
     /**
-     * Creates a new runner with a given width/height/fps
+     * Creates a new runner with a given width/height/rotation
      *
      * @param width Camera video mode width in pixels
      * @param height Camera video mode height in pixels
-     * @param fps Camera video mode FPS
+     * @param rotation Camera video mode rotation
      * @return success of creating a camera object
      */
     public static native boolean createCamera(int width, int height, int rotation);

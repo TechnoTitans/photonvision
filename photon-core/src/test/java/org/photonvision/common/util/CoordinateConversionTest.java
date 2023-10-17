@@ -17,8 +17,6 @@
 
 package org.photonvision.common.util;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -26,6 +24,8 @@ import edu.wpi.first.math.geometry.Translation3d;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.photonvision.common.util.math.MathUtils;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CoordinateConversionTest {
     @BeforeAll

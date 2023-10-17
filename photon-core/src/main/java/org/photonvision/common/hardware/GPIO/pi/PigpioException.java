@@ -23,7 +23,7 @@ import java.util.HashMap;
  * A class that defines the exceptions that can be thrown by Pigpio.
  *
  * <p>Credit to nkolban
- * https://github.com/nkolban/jpigpio/blob/master/JPigpio/src/jpigpio/PigpioException.java
+ * <a href="https://github.com/nkolban/jpigpio/blob/master/JPigpio/src/jpigpio/PigpioException.java">...</a>
  */
 @SuppressWarnings({"SpellCheckingInspection", "unused", "RedundantSuppression"})
 public class PigpioException extends Exception {

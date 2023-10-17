@@ -17,10 +17,11 @@
 
 package org.photonvision.common.hardware;
 
-import java.util.List;
 import org.photonvision.common.hardware.GPIO.CustomGPIO;
 import org.photonvision.common.hardware.GPIO.GPIOBase;
 import org.photonvision.common.hardware.GPIO.pi.PigpioPin;
+
+import java.util.List;
 
 public class StatusLED {
     public final GPIOBase redLED;

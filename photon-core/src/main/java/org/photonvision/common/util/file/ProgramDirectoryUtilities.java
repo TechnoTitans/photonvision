@@ -19,6 +19,7 @@ package org.photonvision.common.util.file;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 public class ProgramDirectoryUtilities {
     private static String getJarName() {
@@ -36,28 +37,28 @@ public class ProgramDirectoryUtilities {
         return jarName.contains(".jar");
     }
 
-    public static String getProgramDirectory() {
+    public static Optional<String> getProgramDirectory() {
         if (runningFromJAR()) {
             return getCurrentJARDirectory();
         } else {
-            return System.getProperty("user.dir");
+            return Optional.ofNullable(System.getProperty("user.dir"));
         }
     }
 
-    private static String getCurrentJARDirectory() {
+    private static Optional<String> getCurrentJARDirectory() {
         try {
-            return new File(
+            return Optional.of(
+                    new File(
                             ProgramDirectoryUtilities.class
                                     .getProtectionDomain()
                                     .getCodeSource()
                                     .getLocation()
                                     .toURI()
-                                    .getPath())
-                    .getParent();
-        } catch (URISyntaxException exception) {
-            exception.printStackTrace();
+                                    .getPath()
+                    ).getParent()
+            );
+        } catch (final URISyntaxException exception) {
+            return Optional.empty();
         }
-
-        return null;
     }
 }

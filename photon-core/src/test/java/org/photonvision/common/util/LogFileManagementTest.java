@@ -17,6 +17,13 @@
 
 package org.photonvision.common.util;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.photonvision.common.configuration.ConfigManager;
+import org.photonvision.common.logging.Logger;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,12 +31,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.photonvision.common.configuration.ConfigManager;
-import org.photonvision.common.logging.Logger;
 
 public class LogFileManagementTest {
     @Test

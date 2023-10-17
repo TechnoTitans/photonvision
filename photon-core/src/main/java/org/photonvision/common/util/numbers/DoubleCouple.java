@@ -32,7 +32,7 @@ public class DoubleCouple extends NumberCouple<Double> {
         super(first, second);
     }
 
-    public DoubleCouple(Point point) {
+    public DoubleCouple(final Point point) {
         super(point.x, point.y);
     }
 
@@ -40,8 +40,8 @@ public class DoubleCouple extends NumberCouple<Double> {
         return new Point(first, second);
     }
 
-    public void fromPoint(Point point) {
-        first = point.x;
-        second = point.y;
+    public void fromPoint(final Point point) {
+        this.first = point.x;
+        this.second = point.y;
     }
 }

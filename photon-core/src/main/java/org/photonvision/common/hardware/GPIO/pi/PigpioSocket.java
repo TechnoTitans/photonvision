@@ -17,14 +17,15 @@
 
 package org.photonvision.common.hardware.GPIO.pi;
 
-import static org.photonvision.common.hardware.GPIO.pi.PigpioException.*;
+import org.photonvision.common.logging.LogGroup;
+import org.photonvision.common.logging.Logger;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
-import org.photonvision.common.logging.LogGroup;
-import org.photonvision.common.logging.Logger;
+
+import static org.photonvision.common.hardware.GPIO.pi.PigpioException.*;
 
 @SuppressWarnings({"SpellCheckingInspection", "unused"})
 public class PigpioSocket {
@@ -201,8 +202,8 @@ public class PigpioSocket {
 
             waveAddGeneric(pulses);
             pulses.clear();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception exception) {
+            logger.error("Failed on AddBlinkPulsesToWaveform!", exception);
         }
     }
 
@@ -319,13 +320,14 @@ public class PigpioSocket {
      * @return The number of DMA control blocks in the waveform
      * @throws PigpioException on failure
      */
+    @SuppressWarnings("UnusedReturnValue")
     public int waveSendOnce(int waveId) throws PigpioException {
         try {
             int retCode = commandSocket.sendCmd(PigpioCommand.PCMD_WVTX.value, waveId);
             if (retCode < 0) throw new PigpioException(retCode);
             return retCode;
-        } catch (IOException e) {
-            throw new PigpioException("waveSendOnce", e);
+        } catch (final IOException ioException) {
+            throw new PigpioException("waveSendOnce", ioException);
         }
     }
 
@@ -337,6 +339,7 @@ public class PigpioSocket {
      * @return The number of DMA control blocks in the waveform
      * @throws PigpioException on failure
      */
+    @SuppressWarnings("UnusedReturnValue")
     public int waveSendRepeat(int waveId) throws PigpioException {
         try {
             int retCode = commandSocket.sendCmd(PigpioCommand.PCMD_WVTXR.value, waveId);

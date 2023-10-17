@@ -25,7 +25,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Credit to nkolban
- * https://github.com/nkolban/jpigpio/blob/master/JPigpio/src/jpigpio/SocketLock.java
+ * <a href="https://github.com/nkolban/jpigpio/blob/master/JPigpio/src/jpigpio/SocketLock.java">...</a>
  */
 final class PigpioSocketLock {
     private static final int replyTimeoutMillis = 1000;

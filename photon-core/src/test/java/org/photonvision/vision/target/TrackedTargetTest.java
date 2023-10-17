@@ -16,9 +16,6 @@
  */
 package org.photonvision.vision.target;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opencv.core.MatOfPoint;
@@ -27,6 +24,10 @@ import org.opencv.core.Size;
 import org.photonvision.common.util.TestUtils;
 import org.photonvision.vision.opencv.Contour;
 import org.photonvision.vision.opencv.DualOffsetValues;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TrackedTargetTest {
     @BeforeEach

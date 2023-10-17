@@ -17,22 +17,23 @@
 
 package org.photonvision.vision.pipe.impl;
 
-import static com.jogamp.opengl.GL.*;
-import static com.jogamp.opengl.GL2ES2.*;
-
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.util.GLBuffers;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureData;
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import jogamp.opengl.GLOffscreenAutoDrawableImpl;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.photonvision.common.logging.LogGroup;
 import org.photonvision.common.logging.Logger;
 import org.photonvision.vision.pipe.CVPipe;
+
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+
+import static com.jogamp.opengl.GL.*;
+import static com.jogamp.opengl.GL2ES2.*;
 
 public class GPUAcceleratedHSVPipe extends CVPipe<Mat, Mat, HSVPipe.HSVParams> {
     private static final String k_vertexShader =

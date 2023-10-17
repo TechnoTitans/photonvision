@@ -17,7 +17,6 @@
 
 package org.photonvision.vision.pipeline;
 
-import java.util.Objects;
 import org.opencv.core.Point;
 import org.photonvision.common.util.numbers.DoubleCouple;
 import org.photonvision.common.util.numbers.IntegerCouple;
@@ -29,6 +28,8 @@ import org.photonvision.vision.target.RobotOffsetPointMode;
 import org.photonvision.vision.target.TargetModel;
 import org.photonvision.vision.target.TargetOffsetPointEdge;
 import org.photonvision.vision.target.TargetOrientation;
+
+import java.util.Objects;
 
 public class AdvancedPipelineSettings extends CVPipelineSettings {
     public AdvancedPipelineSettings() {

@@ -35,8 +35,6 @@
 package org.photonvision.vision.pipeline;
 
 import edu.wpi.first.math.geometry.Transform3d;
-import java.util.ArrayList;
-import java.util.List;
 import org.opencv.core.Mat;
 import org.photonvision.vision.aruco.ArucoDetectionResult;
 import org.photonvision.vision.aruco.ArucoDetectorParams;
@@ -47,6 +45,9 @@ import org.photonvision.vision.pipe.impl.*;
 import org.photonvision.vision.pipeline.result.CVPipelineResult;
 import org.photonvision.vision.target.TrackedTarget;
 import org.photonvision.vision.target.TrackedTarget.TargetCalculationParameters;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArucoPipeline extends CVPipeline<CVPipelineResult, ArucoPipelineSettings> {
     private final RotateImagePipe rotateImagePipe = new RotateImagePipe();

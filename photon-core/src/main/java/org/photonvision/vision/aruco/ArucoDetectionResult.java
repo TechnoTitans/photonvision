@@ -18,12 +18,8 @@
 package org.photonvision.vision.aruco;
 
 import java.util.Arrays;
-import org.photonvision.common.logging.LogGroup;
-import org.photonvision.common.logging.Logger;
 
 public class ArucoDetectionResult {
-    private static final Logger logger =
-            new Logger(ArucoDetectionResult.class, LogGroup.VisionModule);
     double[] xCorners;
     double[] yCorners;
 

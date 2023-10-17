@@ -27,21 +27,19 @@ import org.photonvision.common.util.ShellExec;
 public class NetworkManager {
     private static final Logger logger = new Logger(NetworkManager.class, LogGroup.General);
 
-    private NetworkManager() {}
-
-    private static class SingletonHolder {
-        private static final NetworkManager INSTANCE = new NetworkManager();
-    }
-
     public static NetworkManager getInstance() {
         return SingletonHolder.INSTANCE;
     }
 
-    private boolean isManaged = false;
+    private NetworkManager() {}
+    private static class SingletonHolder {
+        private static final NetworkManager INSTANCE = new NetworkManager();
+    }
+
     public boolean networkingIsDisabled = false; // Passed in via CLI
 
-    public void initialize(boolean shouldManage) {
-        isManaged = shouldManage && !networkingIsDisabled;
+    public void initialize(final boolean shouldManage) {
+        final boolean isManaged = shouldManage && !networkingIsDisabled;
         if (!isManaged) {
             return;
         }

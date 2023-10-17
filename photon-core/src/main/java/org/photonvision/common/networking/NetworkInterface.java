@@ -17,11 +17,13 @@
 
 package org.photonvision.common.networking;
 
-import java.net.InterfaceAddress;
 import org.photonvision.common.logging.LogGroup;
 import org.photonvision.common.logging.Logger;
 
-@SuppressWarnings("WeakerAccess")
+import java.net.InetAddress;
+import java.net.InterfaceAddress;
+
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class NetworkInterface {
     private static final Logger logger = new Logger(NetworkInterface.class, LogGroup.General);
 
@@ -31,16 +33,18 @@ public class NetworkInterface {
     public final String netmask;
     public final String broadcast;
 
-    public NetworkInterface(java.net.NetworkInterface inetface, InterfaceAddress ifaceAddress) {
-        name = inetface.getName();
-        displayName = inetface.getDisplayName();
+    @SuppressWarnings("unused")
+    public NetworkInterface(final java.net.NetworkInterface networkInterface, final InterfaceAddress interfaceAddress) {
+        this.name = networkInterface.getName();
+        this.displayName = networkInterface.getDisplayName();
 
-        var inetAddress = ifaceAddress.getAddress();
-        ipAddress = inetAddress.getHostAddress();
-        netmask = getIPv4LocalNetMask(ifaceAddress);
+        final InetAddress inetAddress = interfaceAddress.getAddress();
+        this.ipAddress = inetAddress.getHostAddress();
+        this.netmask = getIPv4LocalNetMask(interfaceAddress);
 
         // TODO: (low) hack to "get" gateway, this is gross and bad, pls fix
-        var splitIPAddr = ipAddress.split("\\.");
+        final String[] splitIPAddr = ipAddress.split("\\.");
+        // this looks a lot like a bug... why is it assigning to 3 twice?
         splitIPAddr[3] = "1";
         splitIPAddr[3] = "255";
         broadcast = String.join(".", splitIPAddr);

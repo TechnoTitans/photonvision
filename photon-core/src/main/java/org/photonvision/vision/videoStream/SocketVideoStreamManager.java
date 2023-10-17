@@ -18,11 +18,12 @@
 package org.photonvision.vision.videoStream;
 
 import io.javalin.websocket.WsContext;
+import org.photonvision.common.logging.LogGroup;
+import org.photonvision.common.logging.Logger;
+
 import java.nio.ByteBuffer;
 import java.util.Hashtable;
 import java.util.Map;
-import org.photonvision.common.logging.LogGroup;
-import org.photonvision.common.logging.Logger;
 
 public class SocketVideoStreamManager {
     private static final int NO_STREAM_PORT = -1;
