@@ -22,9 +22,11 @@ import org.photonvision.common.logging.Logger;
 import org.photonvision.common.util.file.JacksonUtils;
 import org.photonvision.vision.pipeline.CVPipelineSettings;
 import org.photonvision.vision.pipeline.DriverModePipelineSettings;
-
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
@@ -54,6 +56,7 @@ public class SqlConfigProvider extends ConfigProvider {
         static final String NETWORK_CONFIG = "networkConfig";
         static final String HARDWARE_CONFIG = "hardwareConfig";
         static final String HARDWARE_SETTINGS = "hardwareSettings";
+        static final String ATFL_CONFIG_FILE = "apriltagFieldLayout";
     }
 
     private static final String dbName = "photon.sqlite";
@@ -202,6 +205,7 @@ public class SqlConfigProvider extends ConfigProvider {
             HardwareConfig hardwareConfig;
             HardwareSettings hardwareSettings;
             NetworkConfig networkConfig;
+            AprilTagFieldLayout atfl;
 
             try {
                 hardwareConfig =
@@ -230,6 +234,25 @@ public class SqlConfigProvider extends ConfigProvider {
                 networkConfig = new NetworkConfig();
             }
 
+            try {
+                atfl =
+                        JacksonUtils.deserialize(
+                                getOneConfigFile(conn, TableKeys.ATFL_CONFIG_FILE), AprilTagFieldLayout.class);
+            } catch (IOException e) {
+                logger.error("Could not deserialize apriltag layout! Loading defaults");
+                try {
+                    atfl = AprilTagFields.kDefaultField.loadAprilTagLayoutField();
+                } catch (UncheckedIOException e2) {
+                    logger.error("Error loading WPILib field", e);
+                    atfl = null;
+                }
+                if (atfl == null) {
+                    // what do we even do here lmao -- wpilib should always work
+                    logger.error("Field layout is *still* null??????");
+                    atfl = new AprilTagFieldLayout(List.of(), 1, 1);
+                }
+            }
+
             var cams = loadCameraConfigs(conn);
 
             try {
@@ -238,7 +261,8 @@ public class SqlConfigProvider extends ConfigProvider {
                 logger.error("SQL Err closing connection while loading: ", e);
             }
 
-            this.config = new PhotonConfiguration(hardwareConfig, hardwareSettings, networkConfig, cams);
+            this.config =
+                    new PhotonConfiguration(hardwareConfig, hardwareSettings, networkConfig, atfl, cams);
         }
     }
 
@@ -415,6 +439,11 @@ public class SqlConfigProvider extends ConfigProvider {
     @Override
     public boolean saveUploadedNetworkConfig(Path uploadPath) {
         return saveOneFile(TableKeys.NETWORK_CONFIG, uploadPath);
+    }
+
+    @Override
+    public boolean saveUploadedAprilTagFieldLayout(Path uploadPath) {
+        return saveOneFile(TableKeys.ATFL_CONFIG_FILE, uploadPath);
     }
 
     private HashMap<String, CameraConfiguration> loadCameraConfigs(Connection conn) {

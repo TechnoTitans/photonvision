@@ -355,6 +355,14 @@ public class VisionModule {
         setPipeline(PipelineManager.CAL_3D_INDEX);
     }
 
+    public void saveInputSnapshot() {
+        inputFrameSaver.overrideTakeSnapshot();
+    }
+
+    public void saveOutputSnapshot() {
+        outputFrameSaver.overrideTakeSnapshot();
+    }
+
     public void takeCalibrationSnapshot() {
         pipelineManager.calibration3dPipeline.takeSnapshot();
     }
