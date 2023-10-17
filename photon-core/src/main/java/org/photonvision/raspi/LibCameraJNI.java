@@ -110,11 +110,11 @@ public class LibCameraJNI {
     // ======================================================== //
 
     /**
-     * Creates a new runner with a given width/height/fps
+     * Creates a new runner with a given width/height/rotation
      *
      * @param width Camera video mode width in pixels
      * @param height Camera video mode height in pixels
-     * @param fps Camera video mode FPS
+     * @param rotation Camera video mode rotation
      * @return success of creating a camera object
      */
     public static native boolean createCamera(int width, int height, int rotation);
