@@ -101,6 +101,8 @@ public class USBCameraSource extends VisionSource {
             getAllVideoModes();
             // TODO: figure out the sticky 5 fps bug
             //  for now, we can just comment this out, supposedly there is a better solution, though
+
+            // this didn't seem to work? lets try again.
 //            setVideoMode(videoModes.get(0));
         }
 
