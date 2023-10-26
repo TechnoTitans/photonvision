@@ -65,6 +65,13 @@ nativeUtils {
 }
 
 model {
+    // TODO: make sure that this doesn't break anything, but should be good to commit this along with the rest of the
+    //  stuff for now...
+    toolChains {
+        visualCpp(VisualCpp) {
+
+        }
+    }
     components {
         Photon(NativeLibrarySpec) {
             sources {
