@@ -63,11 +63,6 @@ nativeUtils {
 }
 
 model {
-    toolChains {
-        visualCpp(VisualCpp) {
-
-        }
-    }
     components {
         Photon(NativeLibrarySpec) {
             sources {
