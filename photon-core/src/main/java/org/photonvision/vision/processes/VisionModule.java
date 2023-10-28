@@ -41,10 +41,7 @@ import org.photonvision.vision.camera.QuirkyCamera;
 import org.photonvision.vision.camera.USBCameraSource;
 import org.photonvision.vision.frame.Frame;
 import org.photonvision.vision.frame.consumer.FileSaveFrameConsumer;
-import org.photonvision.vision.pipeline.AdvancedPipelineSettings;
-import org.photonvision.vision.pipeline.OutputStreamPipeline;
-import org.photonvision.vision.pipeline.ReflectivePipelineSettings;
-import org.photonvision.vision.pipeline.UICalibrationData;
+import org.photonvision.vision.pipeline.*;
 import org.photonvision.vision.pipeline.result.CVPipelineResult;
 import org.photonvision.vision.target.TargetModel;
 import org.photonvision.vision.target.TrackedTarget;
@@ -128,9 +125,10 @@ public class VisionModule {
 
         DataChangeService.getInstance().addSubscriber(new VisionModuleChangeSubscriber(this));
 
-        createStreams();
-
-        recreateStreamResultConsumers();
+        if (pipelineManager.getDriverMode()) {
+            createStreams();
+            recreateStreamResultConsumers();
+        }
 
         ntConsumer =
                 new NTDataPublisher(
@@ -169,13 +167,18 @@ public class VisionModule {
     private void destroyStreams() {
         SocketVideoStreamManager.getInstance().removeStream(inputVideoStreamer);
         SocketVideoStreamManager.getInstance().removeStream(outputVideoStreamer);
+
+        inputVideoStreamer.close();
+        outputVideoStreamer.close();
     }
 
     private void createStreams() {
         var camStreamIdx = visionSource.getSettables().getConfiguration().streamIndex;
         // If idx = 0, we want (1181, 1182)
-        this.inputStreamPort = 1181 + (camStreamIdx * 2);
-        this.outputStreamPort = 1181 + (camStreamIdx * 2) + 1;
+
+        // used to be 1181 as the starting port... not sure why... but I changed it!
+        this.inputStreamPort = 1180 + (camStreamIdx * 2);
+        this.outputStreamPort = 1180 + (camStreamIdx * 2) + 1;
 
         inputFrameSaver =
                 new FileSaveFrameConsumer(visionSource.getSettables().getConfiguration().nickname, "input");
@@ -374,12 +377,22 @@ public class VisionModule {
     boolean setPipeline(int index) {
         logger.info("Setting pipeline to " + index);
         logger.info("Pipeline name: " + pipelineManager.getPipelineNickname(index));
-        pipelineManager.setIndex(index);
-        var pipelineSettings = pipelineManager.getPipelineSettings(index);
 
+        final boolean wasDriverMode = pipelineManager.getDriverMode();
+        pipelineManager.setIndex(index);
+
+        final CVPipelineSettings pipelineSettings = pipelineManager.getPipelineSettings(index);
         if (pipelineSettings == null) {
             logger.error("Config for index " + index + " was null! Not changing pipelines");
             return false;
+        }
+
+        final boolean isDriverMode = pipelineManager.getDriverMode();
+        if (!wasDriverMode && isDriverMode) {
+            createStreams();
+            recreateStreamResultConsumers();
+        } else if (wasDriverMode && !isDriverMode) {
+            destroyStreams();
         }
 
         visionSource.getSettables().setVideoModeInternal(pipelineSettings.cameraVideoModeIndex);
@@ -469,12 +482,14 @@ public class VisionModule {
         // Rename streams
         streamResultConsumers.clear();
 
-        // Teardown and recreate streams
-        destroyStreams();
-        createStreams();
+        if (pipelineManager.getDriverMode()) {
+            // Teardown and recreate streams
+            destroyStreams();
+            createStreams();
 
-        // Rebuild streamers
-        recreateStreamResultConsumers();
+            // Rebuild streamers
+            recreateStreamResultConsumers();
+        }
 
         // Push new data to the UI
         saveAndBroadcastAll();

@@ -405,6 +405,7 @@ export default {
       set(value) {
         this.$store.getters.currentCameraSettings.currentPipelineIndex = value ? -1 : 0;
         this.handleInputWithIndex('currentPipeline', value ? -1 : 0);
+        this.reloadStreams();
       }
     },
     selectedOutputs: {

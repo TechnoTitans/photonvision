@@ -75,12 +75,12 @@ public class VisionSourceManager {
 
     protected Supplier<List<UsbCameraInfo>> cameraInfoSupplier =
             () -> List.of(
-//                    UsbCamera.enumerateUsbCameras()
-                    new UsbCameraInfo(0, "/dev/cameras/FL_Apriltag_L", "FL_Apriltag_L", new String[0],  0x2560, 0xc128),
-                    new UsbCameraInfo(1, "/dev/cameras/FR_Apriltag_F", "FR_Apriltag_F", new String[0],  0x0edc, 0x2076),
-                    new UsbCameraInfo(2, "/dev/cameras/FR_Apriltag_R", "FR_Apriltag_R", new String[0],  0x0c45, 0x6366),
-                    new UsbCameraInfo(3, "/dev/cameras/BR_Apriltag_B", "BR_Apriltag_B", new String[0],  0x2560, 0xc128),
-                    new UsbCameraInfo(4, "/dev/cameras/drivercam1", "drivercam1", new String[0],  0x045e, 0x0810)
+                    UsbCamera.enumerateUsbCameras()
+//                    new UsbCameraInfo(0, "/dev/cameras/FL_Apriltag_L", "FL_Apriltag_L", new String[0],  0x2560, 0xc128),
+//                    new UsbCameraInfo(1, "/dev/cameras/FR_Apriltag_F", "FR_Apriltag_F", new String[0],  0x0edc, 0x2076),
+//                    new UsbCameraInfo(2, "/dev/cameras/FR_Apriltag_R", "FR_Apriltag_R", new String[0],  0x0c45, 0x6366),
+//                    new UsbCameraInfo(3, "/dev/cameras/BR_Apriltag_B", "BR_Apriltag_B", new String[0],  0x2560, 0xc128),
+//                    new UsbCameraInfo(4, "/dev/cameras/drivercam1", "drivercam1", new String[0],  0x045e, 0x0810)
             );
 
     protected void tryMatchUSBCams() {

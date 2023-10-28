@@ -30,7 +30,7 @@ import org.opencv.imgproc.Imgproc;
 import org.photonvision.common.util.ColorHelper;
 import org.photonvision.vision.opencv.CVMat;
 
-public class MJPGFrameConsumer {
+public class MJPGFrameConsumer implements AutoCloseable {
     public static final Mat EMPTY_MAT = new Mat(60, 15 * 7, CvType.CV_8UC3);
     private static final double EMPTY_FRAMERATE = 2;
     private long lastEmptyTime;
@@ -234,6 +234,7 @@ public class MJPGFrameConsumer {
         }
     }
 
+    @Override
     public void close() {
         table.getEntry("connected").setBoolean(false);
         mjpegServer.close();

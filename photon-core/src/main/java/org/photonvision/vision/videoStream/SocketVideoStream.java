@@ -29,7 +29,7 @@ import org.photonvision.common.util.math.MathUtils;
 import org.photonvision.vision.frame.consumer.MJPGFrameConsumer;
 import org.photonvision.vision.opencv.CVMat;
 
-public class SocketVideoStream implements Consumer<CVMat> {
+public class SocketVideoStream implements Consumer<CVMat>, AutoCloseable {
     int portID = 0; // Align with cscore's port for unique identification of stream
     MatOfByte jpegBytes = null;
 
@@ -49,16 +49,22 @@ public class SocketVideoStream implements Consumer<CVMat> {
     private long nextFrameSendTime = MathUtils.wpiNanoTime() + minFramePeriodNanos;
     MJPGFrameConsumer oldSchoolServer;
 
-    public SocketVideoStream(int portID) {
+    private boolean isClosed = false;
+
+    public SocketVideoStream(final int portID) {
         this.portID = portID;
-        oldSchoolServer =
+        this.oldSchoolServer =
                 new MJPGFrameConsumer(
                         CameraServerJNI.getHostname() + "_Port_" + Integer.toString(portID) + "_MJPEG_Server",
                         portID);
     }
 
     @Override
-    public void accept(CVMat image) {
+    public void accept(final CVMat image) {
+        if (isClosed) {
+            return;
+        }
+
         if (userCount > 0) {
             if (jpegBytesLock
                     .tryLock()) { // we assume frames are coming in frequently. Just skip this frame if we're
@@ -114,5 +120,11 @@ public class SocketVideoStream implements Consumer<CVMat> {
 
     public void removeUser() {
         userCount--;
+    }
+
+    @Override
+    public void close() {
+        this.oldSchoolServer.close();
+        this.isClosed = true;
     }
 }

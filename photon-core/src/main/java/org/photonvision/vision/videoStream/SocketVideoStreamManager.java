@@ -43,15 +43,15 @@ public class SocketVideoStreamManager {
     private SocketVideoStreamManager() {}
 
     // Register a new available camera stream
-    public void addStream(SocketVideoStream newStream) {
+    public void addStream(final SocketVideoStream newStream) {
         streams.put(newStream.portID, newStream);
-        logger.debug("Added new stream for port " + Integer.toString(newStream.portID));
+        logger.debug("Added new stream for port " + newStream.portID);
     }
 
     // Remove a previously-added camera stream, and unsubscribe all users
-    public void removeStream(SocketVideoStream oldStream) {
+    public void removeStream(final SocketVideoStream oldStream) {
         streams.remove(oldStream.portID);
-        logger.debug("Removed stream for port " + Integer.toString(oldStream.portID));
+        logger.debug("Removed stream for port " + oldStream.portID);
     }
 
     // Indicate a user would like to subscribe to a camera stream and get frames from it periodically
